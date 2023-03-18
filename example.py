@@ -69,6 +69,7 @@ plt.figure(figsize=(10, 10)) #set size of the output graphic view
 n=8
 GD=nx.grid_2d_graph(n,n)
 G = nx.convert_node_labels_to_integers(GD) # rename the vertices as integers
+
 gridposition=dict(zip(G,GD)) # define position as label of the initial graph
 graphexample(G,gridposition,"Grid")
 
@@ -79,7 +80,6 @@ n=40
 G = nx.connected_watts_strogatz_graph(n,2, 0.6)
 
 position=nx.circular_layout(G)
-
 graphexample(G,position,"Small World")
 
 # ERDOS RENY ================================================================
@@ -87,8 +87,8 @@ print("ERDOS RENY")
 plt.figure(figsize=(15, 10)) #set size of the output graphic view
 n=40
 G=nx.erdos_renyi_graph(n,0.3)
-position=nx.spring_layout(G)
 
+position=nx.spring_layout(G)
 graphexample(G,position,"Erdös Reny")
 
 # SCALE FREE ================================================================
@@ -100,5 +100,4 @@ SFG.remove_edges_from(nx.selfloop_edges(SFG))
 G=SFG.to_undirected()
 
 position=nx.spring_layout(G)
-
 graphexample(G,position,"Scale Free")
