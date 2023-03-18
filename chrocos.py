@@ -24,7 +24,7 @@ import networkx as nx
 import seaborn as sns
 
 # Basic Functions ==================================================================
-# Color profile restricted to a community with no transperency
+
 def CommunityColorProfile(p,c):
     """CleanCommunityColorProfile(p,c): Define a color profile restricted to a community
 
@@ -38,7 +38,6 @@ def CommunityColorProfile(p,c):
     return {k:v  for (k,v) in c.items() if k in p}
 
 def CleanCommunityColorProfile(p,c):
-    
     """CleanCommunityColorProfile(p,c): Define a color profile restricted to a community and remove the transparent profile (v:0)
 
     Args:
@@ -50,7 +49,7 @@ def CleanCommunityColorProfile(p,c):
     """
     return {k:v  for (k,v) in c.items() if k in p and v!=0}
       
-# Set of d-dominant signatures used for the computation of Gamma - list of lists where each sublist is a signature.
+
 def DominantSigs(r:int,n:int,d:int)->list:
     """compute all the d-dominant signatures (list) for community of size n considering r colors.
 
@@ -94,7 +93,7 @@ def DominantSigs(r:int,n:int,d:int)->list:
 
 # Enumeration --------------------------------------------------
 
-# Count the number of d-coloring profiles of size n considering r colors
+
 def Kappa(r:int,n:int,d:int) -> int:
     """Count the number of d-coloring profiles of size n considering r colors.
 
@@ -113,7 +112,7 @@ def Kappa(r:int,n:int,d:int) -> int:
         kappa+= ((-1)**(k-1)*comb(r,k)*factorial(n)*(r-k)**(n-k*d)) // (factorial(n-k*d)*factorial(d)**k)
     return kappa
 
-# Count the number of d-dominant coloring profiles of size n considering r colors
+
 def Gamma(r:int,n:int,d:int)->int:
     """Count the number of d-dominant coloring profiles of size n considering r colors.
 
@@ -141,7 +140,7 @@ def Gamma(r:int,n:int,d:int)->int:
     return gamma
 
 # Core chromarities -------------------------------------
-#Kappa Core Chromarity
+
 def Kck(r:int,n:int,d:int)->float:
     """Kappa core chromarity.
 
@@ -218,7 +217,7 @@ def Kg(P:set,c:dict,r:int)->float:
 
 # GRAPH =============================================================================
 # Graph ----------------------------------------------------------
-#Display the colored graph.
+
 #Default palette
 __palette__={0:'lightgray', 1:'crimson', 2:'steelblue', 3:'gold', 4:'lightgreen',5:'mediumpurple',6:'darkorange',7:'burlywood'}
 
@@ -254,7 +253,7 @@ def DrawChroCoS(G,P, theme='Set2', pos=None):
                       font_size=11, font_color='black', font_family=__font__)
     
 # Random Graph  --------------------------------------------------
-# random graph coloring. The function attributes a color to each node.
+
 def RandomColoring(G,seeds:list,density:float=0.2,transparency:float=0.):
     """Attributes colors to nodes of graph G randomly.
 
@@ -323,7 +322,7 @@ def GenerateSeeds(G,r:int):
     return(seeds)
             
 # CHROCODE ===========================================================================
-# Define a monochrome community structure.
+
 def MonochromeCommunityStructure(G):
     """Compute a monochrome community structure of graph G.
 
@@ -351,7 +350,7 @@ def MonochromeCommunityStructure(G):
         P.add(frozenset(p))                 # add the community to the structure
     return P
 
-# Chromatic community structure detection algorithm
+
 def ChroCoDe(G,r:int,radius:int=2,K=Kg):
     """Find a chromatic community structure.
     Args:
