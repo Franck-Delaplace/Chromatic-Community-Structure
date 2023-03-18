@@ -16,7 +16,7 @@
 # Import functions & packages ======================================================
 from math import dist, factorial,comb,ceil,exp,inf 
 from scipy.stats import gmean
-from random import choices, random
+from random import choices, gammavariate, random
 from collections import Counter
 from functools import reduce
 
@@ -98,7 +98,16 @@ def DominantSigs(r:int,n:int,d:int)->list:
 
 # Count the number of d-coloring profiles of size n considering r colors
 def Kappa(r:int,n:int,d:int) -> int:
-    """Kappa(r:int,n:int,d:int) Count the number of d-coloring profiles of size n considering r colors."""
+    """Count the number of d-coloring profiles of size n considering r colors.
+
+    Args:
+        r (int): number of colors
+        n (int): size of the community 
+        d (int): number of nodes of the same color
+
+    Returns:
+        int: number of communities complying with these requirements.
+    """
     assert r >0
     assert n >= d >=0
     kappa=0
@@ -108,13 +117,22 @@ def Kappa(r:int,n:int,d:int) -> int:
 
 # Count the number of d-dominant coloring profiles of size n considering r colors
 def Gamma(r:int,n:int,d:int)->int:
-    """Gamma(r:int,n:int,d:int) count the number of d-dominant coloring profiles of size n considering r colors."""
-    assert r >0
-    assert n >= d >=0
-    gamma=0
-    factorialnr=factorial(n)*factorial(r)
+     """Count the number of d-dominant coloring profiles of size n considering r colors.
 
-    for sig in DominantSigs(r,n,d):
+    Args:
+        r (int): number of colors
+        n (int): size of the community 
+        d (int): number of nodes of the same color which dominates in cardinality
+
+    Returns:
+        int: number of communities complying with these requirements.
+    """
+     assert r >0
+     assert n >= d >=0
+     gamma=0
+     factorialnr=factorial(n)*factorial(r)
+     
+     for sig in DominantSigs(r,n,d):
         ps=1
         for s in sig:
             ps*=factorial(s)
@@ -122,7 +140,6 @@ def Gamma(r:int,n:int,d:int)->int:
         for cs in Counter(sig).values():
             pcs*=factorial(cs)
         gamma+=factorialnr//(ps*pcs)
-        
     return gamma
 
 # Core chromarities -------------------------------------
@@ -249,9 +266,9 @@ def RandomColoring(G,seeds:list,density:float=0.2,transparency:float=0.):
     transparency: probability to generate a transparent color.
 
     Args:
-        G (GRaph): unidrected graph that must be a single component.
+        G (Graph): unidrected graph that must be a single component.
         seeds (list): list of seeds (nodes)
-        density (float, optional): probability parameter . Defaults to 0.2.
+        density (float, optional): probability parameter higher the value less the colors are scattered . Defaults to 0.2.
         transparency (float, optional): probability of transparent nodes. Defaults to 0..
     """
  
@@ -277,7 +294,7 @@ def GenerateSeeds(G,r:int):
         G (Graph): undirected graph that must be a single component.
         r (int): number of colors with r>1
     Returns: 
-    list of nodes: color seeds
+    list: color seeds
     """
     assert(r>1)
     assert nx.is_connected(G) #require that a path exists for any pair of vertices.
@@ -318,7 +335,7 @@ def MonochromeCommunityStructure(G):
     """compute a monochrome community structure of graph G.
 
     Args:
-        G (Graph): Colored undirected graph 
+        G (Graph): Undirected colored graph 
 
     Returns:
         set of frozensets : community structure
@@ -392,5 +409,3 @@ def ChroCoDe(G,r:int,radius:int=2,K=Kg):
             QG=nx.quotient_graph(G,P)                       # Update the quotient graph QG and the running community set Pscan
             Pscan=P.copy()
     return P
-                     
-
