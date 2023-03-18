@@ -26,7 +26,7 @@ import seaborn as sns
 # Basic Functions ==================================================================
 # Color profile restricted to a community with no transperency
 def CommunityColorProfile(p,c):
-      """CleanCommunityColorProfile(p,c): Define a color profile restricted to a community
+    """CleanCommunityColorProfile(p,c): Define a color profile restricted to a community
 
     Args:
         p (set): community
@@ -35,7 +35,7 @@ def CommunityColorProfile(p,c):
     Returns:
     dict: comunity color profile.
     """
-      return {k:v  for (k,v) in c.items() if k in p}
+    return {k:v  for (k,v) in c.items() if k in p}
 
 def CleanCommunityColorProfile(p,c):
     
@@ -174,7 +174,7 @@ def Kcg(r:int,n:int,d:int)->float:
 
 #Kappa Chromarity
 def Kk(P:set,c:dict,r:int)->float:
-    """"compute the Kappa chromarity.
+    """"Compute the Kappa chromarity.
 
     Args:
         P (set): community structure
@@ -196,7 +196,7 @@ def Kk(P:set,c:dict,r:int)->float:
 
 # Gamma Chromarity
 def Kg(P:set,c:dict,r:int)->float:
-    """"compute the Gamma chromarity.
+    """"Compute the Gamma chromarity.
 
     Args:
         P (set): community structure
@@ -256,11 +256,7 @@ def DrawChroCoS(G,P, theme='Set2', pos=None):
 # Random Graph  --------------------------------------------------
 # random graph coloring. The function attributes a color to each node.
 def RandomColoring(G,seeds:list,density:float=0.2,transparency:float=0.):
-    """attributes colors to nodes of  graph G randomly.
-    G: graph,
-    seeds: nodes which are  seeds of colors,
-    density: parameter of the random graph, higher the density less the colors are scattered,
-    transparency: probability to generate a transparent color.
+    """Attributes colors to nodes of graph G randomly.
 
     Args:
         G (Graph): unidrected graph that must be a single component.
@@ -285,7 +281,7 @@ def RandomColoring(G,seeds:list,density:float=0.2,transparency:float=0.):
 
 #Generate a list of r seeds.      
 def GenerateSeeds(G,r:int):
-    """generate r color seeds for graph G by maximizing the  geometric mean distance between them.
+    """Generate r color seeds for graph G by maximizing the  geometric mean distance between them.
 
     Args:
         G (Graph): undirected graph that must be a single component.
@@ -329,7 +325,7 @@ def GenerateSeeds(G,r:int):
 # CHROCODE ===========================================================================
 # Define a monochrome community structure.
 def MonochromeCommunityStructure(G):
-    """compute a monochrome community structure of graph G.
+    """Compute a monochrome community structure of graph G.
 
     Args:
         G (Graph): Undirected colored graph 
