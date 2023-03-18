@@ -49,7 +49,6 @@ def CleanCommunityColorProfile(p,c):
     """
     return {k:v  for (k,v) in c.items() if k in p and v!=0}
       
-
 def DominantSigs(r:int,n:int,d:int)->list:
     """compute all the d-dominant signatures (list) for community of size n considering r colors.
 
@@ -93,7 +92,6 @@ def DominantSigs(r:int,n:int,d:int)->list:
 
 # Enumeration --------------------------------------------------
 
-
 def Kappa(r:int,n:int,d:int) -> int:
     """Count the number of d-coloring profiles of size n considering r colors.
 
@@ -111,7 +109,6 @@ def Kappa(r:int,n:int,d:int) -> int:
     for k in range(1, min(r,n//d)+1):
         kappa+= ((-1)**(k-1)*comb(r,k)*factorial(n)*(r-k)**(n-k*d)) // (factorial(n-k*d)*factorial(d)**k)
     return kappa
-
 
 def Gamma(r:int,n:int,d:int)->int:
     """Count the number of d-dominant coloring profiles of size n considering r colors.
@@ -154,7 +151,6 @@ def Kck(r:int,n:int,d:int)->float:
     """
     return d/n*(1-Kappa(r,n,d)/r**n)
 
-# Gamma Core Chromarity
 def Kcg(r:int,n:int,d:int)->float:
        
        """Gamma core chromarity.
@@ -171,7 +167,6 @@ def Kcg(r:int,n:int,d:int)->float:
     
 # Chromarities ------------------------------------------
 
-#Kappa Chromarity
 def Kk(P:set,c:dict,r:int)->float:
     """"Compute the Kappa chromarity.
 
@@ -193,7 +188,6 @@ def Kk(P:set,c:dict,r:int)->float:
     else:
         return 0
 
-# Gamma Chromarity
 def Kg(P:set,c:dict,r:int)->float:
     """"Compute the Gamma chromarity.
 
@@ -216,7 +210,8 @@ def Kg(P:set,c:dict,r:int)->float:
         return 0
 
 # GRAPH =============================================================================
-# Graph ----------------------------------------------------------
+
+# Display  ----------------------------------------------------------
 
 #Default palette
 __palette__={0:'lightgray', 1:'crimson', 2:'steelblue', 3:'gold', 4:'lightgreen',5:'mediumpurple',6:'darkorange',7:'burlywood'}
@@ -277,8 +272,7 @@ def RandomColoring(G,seeds:list,density:float=0.2,transparency:float=0.):
     if transparency >0:
         transparent=[v for v in G.nodes() if random()< transparency]
         nx.set_node_attribute(G,dict.fromkey(transparent,0),"color")
-
-#Generate a list of r seeds.      
+   
 def GenerateSeeds(G,r:int):
     """Generate r color seeds for graph G by maximizing the  geometric mean distance between them.
 
