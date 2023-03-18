@@ -117,7 +117,7 @@ def Kappa(r:int,n:int,d:int) -> int:
 
 # Count the number of d-dominant coloring profiles of size n considering r colors
 def Gamma(r:int,n:int,d:int)->int:
-     """Count the number of d-dominant coloring profiles of size n considering r colors.
+    """Count the number of d-dominant coloring profiles of size n considering r colors.
 
     Args:
         r (int): number of colors
@@ -127,12 +127,12 @@ def Gamma(r:int,n:int,d:int)->int:
     Returns:
         int: number of communities complying with these requirements.
     """
-     assert r >0
-     assert n >= d >=0
-     gamma=0
-     factorialnr=factorial(n)*factorial(r)
-     
-     for sig in DominantSigs(r,n,d):
+    assert r >0
+    assert n >= d >=0
+    gamma=0
+    factorialnr=factorial(n)*factorial(r)
+    
+    for sig in DominantSigs(r,n,d):
         ps=1
         for s in sig:
             ps*=factorial(s)
@@ -172,7 +172,6 @@ def Kcg(r:int,n:int,d:int)->float:
     """
        return d/n*(1-Gamma(r,n,d)/r**n)
     
-
 # Chromarities ------------------------------------------
 
 #Kappa Chromarity
