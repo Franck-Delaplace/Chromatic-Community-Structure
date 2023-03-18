@@ -50,8 +50,6 @@ def CleanCommunityColorProfile(p,c):
     """
     return {k:v  for (k,v) in c.items() if k in p and v!=0}
       
-
-
 # Set of d-dominant signatures used for the computation of Gamma - list of lists where each sublist is a signature.
 def DominantSigs(r:int,n:int,d:int)->list:
     """compute all the d-dominant signatures (list) for community of size n considering r colors.
