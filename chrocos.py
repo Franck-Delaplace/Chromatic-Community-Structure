@@ -2,12 +2,12 @@
 # AUTHOR : Franck Delaplace
 # CREATION DATE: 12/03/2023
 
-# DATA STRUCTURES
+# ** DATA STRUCTURES
 # a community p is a (frozen) set of nodes p={n1,n2,...} or p=frozenset({n1,n2,...})
 # a community structure P is a set of frozen node sets  P=[p1,p2,...] where pi is a frozenset.
 # a color profile c is defined by a dictionary {node:color ...}.
 
-        # Throughout the functions:
+# Throughout the functions:
 #   - r is the number of colors, r>=1
 #   - n is the size of the community, 
 #   - d is the number of nodes with the same color. 0<=d<=n
@@ -33,7 +33,7 @@ def CommunityColorProfile(p:set|frozenset,c: dict):
         c (dict): color profil
 
     Returns:
-    dict: comunity color profile.
+    dict: community color profile.
     """
     return {k:v  for (k,v) in c.items() if k in p}
 
