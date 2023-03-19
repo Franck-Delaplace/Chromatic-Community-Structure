@@ -23,7 +23,7 @@ from functools import reduce
 import networkx as nx
 import seaborn as sns
 
-# Basic Functions ==================================================================
+#** Basic Functions ==================================================================
 
 def CommunityColorProfile(p:set|frozenset,c: dict):
     """CleanCommunityColorProfile(p,c): Define a color profile restricted to a community
@@ -88,7 +88,7 @@ def DominantSigs(r:int,n:int,d:int)->list:
         dss=DSS(r-1,n-d,d,[d])
     return dss
 
-# CHROMARITIES =========================================================================
+#** CHROMARITIES =========================================================================
 
 # Enumeration --------------------------------------------------
 
@@ -209,7 +209,7 @@ def Kg(P:set,c:dict,r:int)->float:
     else:
         return 0
 
-# GRAPH =============================================================================
+#** GRAPH =============================================================================
 
 # Display  ----------------------------------------------------------
 
@@ -315,7 +315,7 @@ def GenerateSeeds(G,r:int):
         V.remove(vmax)
     return(seeds)
             
-# CHROCODE ===========================================================================
+#** CHROCODE ===========================================================================
 
 def MonochromeCommunityStructure(G):
     """Compute a monochrome community structure of graph G.
@@ -326,10 +326,10 @@ def MonochromeCommunityStructure(G):
     Returns:
         set of frozensets : community structure
     """
-    V=set(G.nodes())
+    pendingnodes=set(G.nodes())
     P=set()
-    while V:
-        v= next(iter(V))                    # take a node 
+    while pendingnodes:
+        v= next(iter(pendingnodes))         # take the first available node 
         referencecolor=G.nodes[v]['color']  # get its color used as reference colore
         p=set()
         monochromeneighbors={v}
@@ -340,7 +340,7 @@ def MonochromeCommunityStructure(G):
                 if G.nodes[w]['color']==referencecolor and not w in p:
                     monochromeneighbors.add(w)
                     
-        V = V - p                           # remove the community of the examined vertices. 
+        pendingnodes = pendingnodes - p                           # remove the community of the examined vertices. 
         P.add(frozenset(p))                 # add the community to the structure
     return P
 
@@ -360,7 +360,7 @@ def ChroCoDe(G,r:int,radius:int=2,K=Kg):
     assert(r>0)
     
     colorprofile=nx.get_node_attributes(G,'color')
-    QG=nx.quotient_graph(G,MonochromeCommunityStructure(G)) # Quotient graph of the community structure
+    QG=nx.quotient_graph(G,MonochromeCommunityStructure(G)) # Quotient graph of the monochrome community structure
     P=set(QG.nodes())
     Pscan=P.copy()
     
