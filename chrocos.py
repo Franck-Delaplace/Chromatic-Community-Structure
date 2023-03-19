@@ -25,7 +25,7 @@ import seaborn as sns
 
 # Basic Functions ==================================================================
 
-def CommunityColorProfile(p,c):
+def CommunityColorProfile(p:set|frozenset,c: dict):
     """CleanCommunityColorProfile(p,c): Define a color profile restricted to a community
 
     Args:
@@ -37,7 +37,7 @@ def CommunityColorProfile(p,c):
     """
     return {k:v  for (k,v) in c.items() if k in p}
 
-def CleanCommunityColorProfile(p,c):
+def CleanCommunityColorProfile(p:set|frozenset,c: dict):
     """CleanCommunityColorProfile(p,c): Define a color profile restricted to a community and remove the transparent profile (v:0)
 
     Args:
@@ -214,17 +214,17 @@ def Kg(P:set,c:dict,r:int)->float:
 # Display  ----------------------------------------------------------
 
 #Default palette
-__palette__={0:'lightgray', 1:'crimson', 2:'steelblue', 3:'gold', 4:'lightgreen',5:'mediumpurple',6:'darkorange',7:'burlywood'}
+__chrocos_palette__={0:'lightgray', 1:'crimson', 2:'steelblue', 3:'gold', 4:'lightgreen',5:'mediumpurple',6:'darkorange',7:'burlywood'}
 
 #Default font
 __font__='Franklin Gothic Heavy'  #other nice fonts  'Tahoma'  'Impact'
 
-def DrawColoredGraph(G, palette=__palette__,pos=None):
+def DrawColoredGraph(G, palette=__chrocos_palette__,pos=None):
     """Display a colored graph
 
     Args:
         G (Graph): colored graph
-        palette (dict, optional): color palette associating a color to integer. Defaults to __palette__ (6 colors).
+        palette (dict, optional): color palette associating a color to integer. Defaults to __chrocos_palette__ (6 colors).
         pos (dict|None, optional): node position. Defaults to None.
     """
     color=nx.get_node_attributes(G,"color")
@@ -232,7 +232,7 @@ def DrawColoredGraph(G, palette=__palette__,pos=None):
                       font_size=11, font_color='black', font_family=__font__)
 
 # Display the community structure on graph 
-def DrawChroCoS(G,P, theme='Set2', pos=None):
+def DrawChroCoS(G,P: set, theme:str='Set2', pos=None):
     """ Display the chromarity structure on a graph. The nodes of the same community are the same color.
     Args:
         G (Graph): _Undirected colored graph_
