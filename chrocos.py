@@ -47,7 +47,7 @@ def CleanCommunityColorProfile(p:set|frozenset,c: dict):
     Returns:
     dict: comunity color profile.
     """
-    return {k:v  for (k,v) in c.items() if k in p and v!=0}
+    return {k:v for (k,v) in c.items() if k in p and v!=0}
       
 def DominantSigs(r:int,n:int,d:int)->list:
     """compute all the d-dominant signatures (list) for community of size n considering r colors.
@@ -177,16 +177,17 @@ def Kk(P:set,c:dict,r:int)->float:
 
     Returns:
         float: chromarity value.
-    """
-    if P:   
-        k=0
-        for p in P:
-            colors=CleanCommunityColorProfile(p,c).values()
-            if colors:
-                k+=Kck(r,len(p),max(Counter(colors).values()))
-        return k/len(P)
-    else:
-        return 0
+    """ 
+    k=0
+    for p in P:
+        colors=CleanCommunityColorProfile(p,c).values()
+        try
+            k+=Kck(r,len(p),max(Counter(colors).values()))
+        except ValueError:
+            pass
+
+    return k/len(P)
+
 
 def Kg(P:set,c:dict,r:int)->float:
     """"Compute the Gamma chromarity.
@@ -199,15 +200,15 @@ def Kg(P:set,c:dict,r:int)->float:
     Returns:
         float: chromarity value.
     """
-    if P:   
-        k=0
-        for p in P:
-            colors=CleanCommunityColorProfile(p,c).values()
-            if colors:
-                k+=Kcg(r,len(p),max(Counter(colors).values()))
-        return k/len(P)
-    else:
-        return 0
+    k=0
+    for p in P:
+        colors=CleanCommunityColorProfile(p,c).values()
+        try
+            k+=Kcg(r,len(p),max(Counter(colors).values()))
+        except ValueError:
+            pass
+        
+    return k/len(P)
 
 #** GRAPH =============================================================================
 
