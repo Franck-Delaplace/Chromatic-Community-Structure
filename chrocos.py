@@ -354,7 +354,6 @@ def MonochromeCommunityStructure(G: graph_t):
         P.add(frozenset(p))                 # add the community to the structure
     return P
 
-
 def ChroCoDe(G: graph_t,r:int,radius:int=2,K=Kg):
     """Find a chromatic community structure.
     Args:
@@ -368,7 +367,7 @@ def ChroCoDe(G: graph_t,r:int,radius:int=2,K=Kg):
     """
     assert(radius>=1)
     assert(r>0)
-    
+
     colorprofile=nx.get_node_attributes(G,'color')
     QG=nx.quotient_graph(G,MonochromeCommunityStructure(G)) # Quotient graph of the monochrome community structure
     P=set(QG.nodes())
@@ -380,7 +379,7 @@ def ChroCoDe(G: graph_t,r:int,radius:int=2,K=Kg):
         for q in Pscan:                                     # find the community p in P with the minimal core chromarity
             k=K({q},colorprofile,r)
             if k<kmin:
-                k=kmin
+                kmin=k
                 p=q
         Pscan.remove(p)
 
