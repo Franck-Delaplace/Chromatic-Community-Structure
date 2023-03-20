@@ -185,8 +185,12 @@ def Kk(P:set,c:dict,r:int)->float:
             k+=Kck(r,len(p),max(Counter(colors).values()))
         except ValueError:
             pass
+    try
+        chromarity = k/len(P)
+    except ZeroDivisionError:
+        chromarity=0
+    return chromarity
 
-    return k/len(P)
 
 
 def Kg(P:set,c:dict,r:int)->float:
@@ -207,8 +211,11 @@ def Kg(P:set,c:dict,r:int)->float:
             k+=Kcg(r,len(p),max(Counter(colors).values()))
         except ValueError:
             pass
-        
-    return k/len(P)
+    try
+        chromarity = k/len(P)
+    except ZeroDivisionError:
+        chromarity=0
+    return chromarity
 
 #** GRAPH =============================================================================
 
