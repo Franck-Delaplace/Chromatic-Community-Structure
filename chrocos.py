@@ -16,7 +16,7 @@
 # Import functions & packages ======================================================
 from math import dist, factorial,comb,ceil,exp,inf 
 from scipy.stats import gmean
-from random import choices, gammavariate, random
+from random import choices, random
 from collections import Counter
 from functools import reduce
 
