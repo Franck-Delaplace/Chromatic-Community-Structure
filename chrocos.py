@@ -224,7 +224,7 @@ def Kg(P:set,c:dict,r:int)->float:
 # Display  ----------------------------------------------------------
 
 #Default palette
-__chrocos_palette__={0:'lightgray', 1:'crimson', 2:'steelblue', 3:'gold', 4:'lightgreen',5:'mediumpurple',6:'darkorange',7:'burlywood'}
+__chrocos_palette__={0:'lightgray', 1:'lightgreen', 2:'crimson', 3:'gold', 4:'steelblue',5:'mediumpurple',6:'darkorange',7:'burlywood'}
 
 #Default font
 __font__='Franklin Gothic Heavy'  #other nice fonts  'Tahoma'  'Impact'
