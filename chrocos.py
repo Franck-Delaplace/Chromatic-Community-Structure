@@ -3,12 +3,12 @@
 # CREATION DATE: 12/03/2023
 
 # ** DATA STRUCTURES
-# a community p is a (frozen) set of nodes p={n1,n2,...} or p=frozenset({n1,n2,...})
+# a community p is a (frozen) set of nodes p=frozenset({n1,n2,...})
 # a community structure P is a set of frozen node sets  P=[p1,p2,...] where pi is a frozenset.
 # a color profile c is defined by a dictionary {node:color ...}.
 
 # Throughout the functions:
-#   - r is the number of colors, r>=1
+#   - r is the number of colors, r>=0
 #   - n is the size of the community, 
 #   - d is the number of nodes with the same color. 0<=d<=n
 # The colors are integers from 1 to r and 0 stands for the transparent color
@@ -16,16 +16,19 @@
 # Import functions & packages ======================================================
 from math import dist, factorial,comb,ceil,exp,inf 
 from scipy.stats import gmean
-from random import choices, gammavariate, random
+from random import choices, random
 from collections import Counter
 from functools import reduce
 
 import networkx as nx
 import seaborn as sns
 
-#** Basic Functions ==================================================================
+# graph type alias
+graph_t = nx.classes.graph.Graph
 
-def CommunityColorProfile(p:set|frozenset,c: dict):
+#** BASIC FUNCTIONS ==================================================================
+
+def CommunityColorProfile(p:frozenset,c: dict):
     """CleanCommunityColorProfile(p,c): Define a color profile restricted to a community
 
     Args:
@@ -47,7 +50,7 @@ def CleanCommunityColorProfile(p:set|frozenset,c: dict):
     Returns:
     dict: comunity color profile.
     """
-    return {k:v  for (k,v) in c.items() if k in p and v!=0}
+    return {k:v for (k,v) in c.items() if k in p and v!=0}
       
 def DominantSigs(r:int,n:int,d:int)->list:
     """compute all the d-dominant signatures (list) for community of size n considering r colors.
@@ -103,7 +106,7 @@ def Kappa(r:int,n:int,d:int) -> int:
     Returns:
         int: number of communities complying with these requirements.
     """
-    assert r >0
+    assert r >=0
     assert n >= d >=0
     kappa=0
     for k in range(1, min(r,n//d)+1):
@@ -121,7 +124,7 @@ def Gamma(r:int,n:int,d:int)->int:
     Returns:
         int: number of communities complying with these requirements.
     """
-    assert r >0
+    assert r >=0
     assert n >= d >=0
     gamma=0
     factorialnr=factorial(n)*factorial(r)
@@ -168,7 +171,7 @@ def Kcg(r:int,n:int,d:int)->float:
 # Chromarities ------------------------------------------
 
 def Kk(P:set,c:dict,r:int)->float:
-    """"Compute the Kappa chromarity.
+    """"Compute the Kappa chromarity of a community structure.
 
     Args:
         P (set): community structure
@@ -177,19 +180,23 @@ def Kk(P:set,c:dict,r:int)->float:
 
     Returns:
         float: chromarity value.
-    """
-    if P:   
-        k=0
-        for p in P:
-            colors=CleanCommunityColorProfile(p,c).values()
-            if colors:
-                k+=Kck(r,len(p),max(Counter(colors).values()))
-        return k/len(P)
-    else:
-        return 0
+    """ 
+    k=0
+    for p in P:
+        colors=CleanCommunityColorProfile(p,c).values()
+        try:
+            k+=Kck(r,len(p),max(Counter(colors).values()))
+        except ValueError: # case a community is empty  K(p)=0
+            pass
+    try:
+        chromarity = k/len(P)
+    except ZeroDivisionError: #case the structure is empty K(P)=0
+        chromarity=0
+    return chromarity
+
 
 def Kg(P:set,c:dict,r:int)->float:
-    """"Compute the Gamma chromarity.
+    """"Compute the Gamma chromarity of a community structure.
 
     Args:
         P (set): community structure
@@ -199,15 +206,18 @@ def Kg(P:set,c:dict,r:int)->float:
     Returns:
         float: chromarity value.
     """
-    if P:   
-        k=0
-        for p in P:
-            colors=CleanCommunityColorProfile(p,c).values()
-            if colors:
-                k+=Kcg(r,len(p),max(Counter(colors).values()))
-        return k/len(P)
-    else:
-        return 0
+    k=0
+    for p in P:
+        colors=CleanCommunityColorProfile(p,c).values()
+        try:
+            k+=Kcg(r,len(p),max(Counter(colors).values()))
+        except ValueError: # case a community is empty  K(p)=0
+            pass
+    try:
+        chromarity = k/len(P)
+    except ZeroDivisionError:  #case the structure is empty K(P)=0
+        chromarity=0
+    return chromarity
 
 #** GRAPH =============================================================================
 
@@ -219,7 +229,7 @@ __chrocos_palette__={0:'lightgray', 1:'crimson', 2:'steelblue', 3:'gold', 4:'lig
 #Default font
 __font__='Franklin Gothic Heavy'  #other nice fonts  'Tahoma'  'Impact'
 
-def DrawColoredGraph(G, palette=__chrocos_palette__,pos=None):
+def DrawColoredGraph(G, palette: dict=__chrocos_palette__,pos=None):
     """Display a colored graph
 
     Args:
@@ -249,7 +259,7 @@ def DrawChroCoS(G,P: set, theme:str='Set2', pos=None):
     
 # Random Graph  --------------------------------------------------
 
-def RandomColoring(G,seeds:list,density:float=0.2,transparency:float=0.):
+def RandomColoring(G:graph_t,seeds:list,density:float=0.2,transparency:float=0.):
     """Attributes colors to nodes of graph G randomly.
 
     Args:
@@ -273,7 +283,7 @@ def RandomColoring(G,seeds:list,density:float=0.2,transparency:float=0.):
         transparent=[v for v in G.nodes() if random()< transparency]
         nx.set_node_attribute(G,dict.fromkey(transparent,0),"color")
    
-def GenerateSeeds(G,r:int):
+def GenerateSeeds(G:graph_t,r:int):
     """Generate r color seeds for graph G by maximizing the  geometric mean distance between them.
 
     Args:
@@ -317,7 +327,7 @@ def GenerateSeeds(G,r:int):
             
 #** CHROCODE ===========================================================================
 
-def MonochromeCommunityStructure(G):
+def MonochromeCommunityStructure(G: graph_t):
     """Compute a monochrome community structure of graph G.
 
     Args:
@@ -345,7 +355,7 @@ def MonochromeCommunityStructure(G):
     return P
 
 
-def ChroCoDe(G,r:int,radius:int=2,K=Kg):
+def ChroCoDe(G: graph_t,r:int,radius:int=2,K=Kg):
     """Find a chromatic community structure.
     Args:
         G (Graph): Colored undirected graph 
