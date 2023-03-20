@@ -183,11 +183,11 @@ def Kk(P:set,c:dict,r:int)->float:
         colors=CleanCommunityColorProfile(p,c).values()
         try:
             k+=Kck(r,len(p),max(Counter(colors).values()))
-        except ValueError:
+        except ValueError: # case a community is empty  K(p)=0
             pass
     try:
         chromarity = k/len(P)
-    except ZeroDivisionError:
+    except ZeroDivisionError: #case the structure is empty K(P)=0
         chromarity=0
     return chromarity
 
@@ -208,11 +208,11 @@ def Kg(P:set,c:dict,r:int)->float:
         colors=CleanCommunityColorProfile(p,c).values()
         try:
             k+=Kcg(r,len(p),max(Counter(colors).values()))
-        except ValueError:
+        except ValueError: # case a community is empty  K(p)=0
             pass
     try:
         chromarity = k/len(P)
-    except ZeroDivisionError:
+    except ZeroDivisionError:  #case the structure is empty K(P)=0
         chromarity=0
     return chromarity
 
