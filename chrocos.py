@@ -65,31 +65,31 @@ def DominantSigs(r:int,n:int,d:int)->list:
     """
     assert r>= 0
     assert n>=d>=0
-    # sub function of Dominant signatures (rest=remaining sum, dbound= bound value, seq= sequence of sum)
-    def DSS(depth:int,rest:int,dbound:int,seq):
+    # sub function of Dominant signatures (depth=depth, rest=remaining valye for which elements to sum must be found, dbound= max bound value, sig= signature)
+    def DSS(depth:int,rest:int,dbound:int,sig: list):
         if rest==0:
-            ds=[depth*[0]+seq]
+            ds=[depth*[0]+sig]
         elif dbound==0:
             ds=[]
         elif depth==0:
             if rest==0:
-                ds=[seq]
+                ds=[sig]
             else:
                 ds=[]
         else:
             ds=[]
             for v in range(ceil(rest/depth),min(dbound,rest)+1):
-                ds= DSS(depth-1,rest-v,v,[v]+seq) + ds
+                ds= DSS(depth-1,rest-v,v,[v]+sig) + ds
         return ds
     # main
     if r==0:
         if n==0:
-            dss= [[]]
+            domsigset= [[]]
         else:
-            dss= []
+            domsigset= []
     else:
-        dss=DSS(r-1,n-d,d,[d])
-    return dss
+        domsigset=DSS(r-1,n-d,d,[d])
+    return domsigset
 
 #** CHROMARITIES =========================================================================
 
