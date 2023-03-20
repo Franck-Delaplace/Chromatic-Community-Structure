@@ -40,7 +40,7 @@ def CommunityColorProfile(p:frozenset,c: dict):
     """
     return {k:v  for (k,v) in c.items() if k in p}
 
-def CleanCommunityColorProfile(p:set|frozenset,c: dict):
+def CleanCommunityColorProfile(p:frozenset,c: dict):
     """CleanCommunityColorProfile(p,c): Define a color profile restricted to a community and remove the transparent profile (v:0)
 
     Args:
