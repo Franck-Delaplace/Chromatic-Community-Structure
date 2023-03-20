@@ -23,9 +23,12 @@ from functools import reduce
 import networkx as nx
 import seaborn as sns
 
-#** Basic Functions ==================================================================
+# graph type alias
+graph_t = nx.classes.graph.Graph
 
-def CommunityColorProfile(p:set|frozenset,c: dict):
+#** BASIC FUNCTIONS ==================================================================
+
+def CommunityColorProfile(p:frozenset,c: dict):
     """CleanCommunityColorProfile(p,c): Define a color profile restricted to a community
 
     Args:
@@ -103,7 +106,7 @@ def Kappa(r:int,n:int,d:int) -> int:
     Returns:
         int: number of communities complying with these requirements.
     """
-    assert r >0
+    assert r >=0
     assert n >= d >=0
     kappa=0
     for k in range(1, min(r,n//d)+1):
@@ -121,7 +124,7 @@ def Gamma(r:int,n:int,d:int)->int:
     Returns:
         int: number of communities complying with these requirements.
     """
-    assert r >0
+    assert r >=0
     assert n >= d >=0
     gamma=0
     factorialnr=factorial(n)*factorial(r)
@@ -168,7 +171,7 @@ def Kcg(r:int,n:int,d:int)->float:
 # Chromarities ------------------------------------------
 
 def Kk(P:set,c:dict,r:int)->float:
-    """"Compute the Kappa chromarity.
+    """"Compute the Kappa chromarity of a community structure.
 
     Args:
         P (set): community structure
@@ -193,7 +196,7 @@ def Kk(P:set,c:dict,r:int)->float:
 
 
 def Kg(P:set,c:dict,r:int)->float:
-    """"Compute the Gamma chromarity.
+    """"Compute the Gamma chromarity of a community structure.
 
     Args:
         P (set): community structure
@@ -226,7 +229,7 @@ __chrocos_palette__={0:'lightgray', 1:'crimson', 2:'steelblue', 3:'gold', 4:'lig
 #Default font
 __font__='Franklin Gothic Heavy'  #other nice fonts  'Tahoma'  'Impact'
 
-def DrawColoredGraph(G, palette=__chrocos_palette__,pos=None):
+def DrawColoredGraph(G, palette: dict=__chrocos_palette__,pos=None):
     """Display a colored graph
 
     Args:
@@ -256,7 +259,7 @@ def DrawChroCoS(G,P: set, theme:str='Set2', pos=None):
     
 # Random Graph  --------------------------------------------------
 
-def RandomColoring(G,seeds:list,density:float=0.2,transparency:float=0.):
+def RandomColoring(G:graph_t,seeds:list,density:float=0.2,transparency:float=0.):
     """Attributes colors to nodes of graph G randomly.
 
     Args:
@@ -280,7 +283,7 @@ def RandomColoring(G,seeds:list,density:float=0.2,transparency:float=0.):
         transparent=[v for v in G.nodes() if random()< transparency]
         nx.set_node_attribute(G,dict.fromkey(transparent,0),"color")
    
-def GenerateSeeds(G,r:int):
+def GenerateSeeds(G:graph_t,r:int):
     """Generate r color seeds for graph G by maximizing the  geometric mean distance between them.
 
     Args:
@@ -324,7 +327,7 @@ def GenerateSeeds(G,r:int):
             
 #** CHROCODE ===========================================================================
 
-def MonochromeCommunityStructure(G):
+def MonochromeCommunityStructure(G: graph_t):
     """Compute a monochrome community structure of graph G.
 
     Args:
@@ -352,7 +355,7 @@ def MonochromeCommunityStructure(G):
     return P
 
 
-def ChroCoDe(G,r:int,radius:int=2,K=Kg):
+def ChroCoDe(G: graph_t,r:int,radius:int=2,K=Kg):
     """Find a chromatic community structure.
     Args:
         G (Graph): Colored undirected graph 
