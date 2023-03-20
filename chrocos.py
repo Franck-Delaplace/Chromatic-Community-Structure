@@ -192,7 +192,6 @@ def Kk(P:set,c:dict,r:int)->float:
     return chromarity
 
 
-
 def Kg(P:set,c:dict,r:int)->float:
     """"Compute the Gamma chromarity.
 
