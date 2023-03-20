@@ -181,11 +181,11 @@ def Kk(P:set,c:dict,r:int)->float:
     k=0
     for p in P:
         colors=CleanCommunityColorProfile(p,c).values()
-        try
+        try:
             k+=Kck(r,len(p),max(Counter(colors).values()))
         except ValueError:
             pass
-    try
+    try:
         chromarity = k/len(P)
     except ZeroDivisionError:
         chromarity=0
@@ -206,11 +206,11 @@ def Kg(P:set,c:dict,r:int)->float:
     k=0
     for p in P:
         colors=CleanCommunityColorProfile(p,c).values()
-        try
+        try:
             k+=Kcg(r,len(p),max(Counter(colors).values()))
         except ValueError:
             pass
-    try
+    try:
         chromarity = k/len(P)
     except ZeroDivisionError:
         chromarity=0
