@@ -174,11 +174,11 @@ def K(P:set,c:dict,r:int,funK: fun3int2int_t=Gamma)->float:
         colors=CleanCommunityColorProfile(p,c).values()
         try:
             k+=Kcore(r,len(p),max(Counter(colors).values()),funK)
-        except ValueError: # case a community is empty  K(p)=0
+        except ValueError: # case if a community is empty  K(p)=0
             pass
     try:
         chromarity = k/len(P)
-    except ZeroDivisionError: #case the structure is empty K(P)=0
+    except ZeroDivisionError: #case if the structure is empty K(P)=0
         chromarity=0
     return chromarity
 
