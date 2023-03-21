@@ -183,6 +183,7 @@ def K(P:set,c:dict,r:int,funK: fun3int2int_t=Gamma)->float:
     except ZeroDivisionError: #case the structure is empty K(P)=0
         chromarity=0
     return chromarity
+
 #** GRAPH =============================================================================
 
 # Display  ----------------------------------------------------------
