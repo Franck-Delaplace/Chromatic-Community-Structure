@@ -18,8 +18,9 @@ from math import factorial,comb,ceil,exp,inf
 from scipy.stats import gmean
 from random import choices, random
 from collections import Counter
+from collections.abc import Callable
 from functools import reduce
-from typing import Callable
+
 
 import networkx as nx
 import seaborn as sns
@@ -56,7 +57,7 @@ def CleanCommunityColorProfile(p:frozenset,c: dict)-> dict:
     """
     return {k:v for (k,v) in c.items() if k in p and v!=0}
       
-def DominantSigs(r:int,n:int,d:int)->list:
+def DominantSigs(r:int,n:int,d:int)-> list[list[int]]:
     """compute all the d-dominant signatures (list) for community of size n considering r colors.
 
     Args:
@@ -70,7 +71,7 @@ def DominantSigs(r:int,n:int,d:int)->list:
     assert r>= 0
     assert n>=d>=0
     # sub function of Dominant signatures (depth=depth, rest=remaining valye for which elements to sum must be found, dbound= max bound value, sig= signature)
-    def DSS(depth:int,rest:int,dbound:int,sig: list):
+    def DSS(depth:int,rest:int,dbound:int,sig:list):
         if rest==0:
             ds=[depth*[0]+sig]
         elif dbound==0:
@@ -193,12 +194,12 @@ __chrocos_palette__={0:'lightgray', 1:'lightgreen', 2:'crimson', 3:'gold', 4:'st
 #Default font
 __font__='Franklin Gothic Heavy'  #other nice fonts  'Tahoma'  'Impact'
 
-def DrawColoredGraph(G, palette: dict=__chrocos_palette__,pos=None):
+def DrawColoredGraph(G, palette: dict[int,str]=__chrocos_palette__,pos=None):
     """Display a colored graph
 
     Args:
         G (Graph): colored graph
-        palette (dict, optional): color palette associating a color to integer. Defaults to __chrocos_palette__ (6 colors).
+        palette (dict[int,str], optional): color palette associating a color to integer. Defaults to __chrocos_palette__ (6 colors).
         pos (dict|None, optional): node position. Defaults to None.
     """
     color=nx.get_node_attributes(G,"color")
@@ -206,11 +207,11 @@ def DrawColoredGraph(G, palette: dict=__chrocos_palette__,pos=None):
                       font_size=11, font_color='black', font_family=__font__)
 
 # Display the community structure on graph 
-def DrawChroCoS(G,P: set, theme:str='Set2', pos=None):
+def DrawChroCoS(G,P: set[frozenset], theme:str='Set2', pos=None):
     """ Display the chromarity structure on a graph. The nodes of the same community are the same color.
     Args:
         G (Graph): _Undirected colored graph_
-        P (set): _community structure_
+        P (set[frozenset]): _community structure_
         theme (str, optional): theme color of seaborn package. Defaults to 'Set2'.
         pos (dict|None, optional): position of nodes. Defaults to None.
     """
