@@ -4,7 +4,7 @@
 #           and draw the chromatic community structure solution on the graphs.
 #
 
-from chrocos import K,Kcore , Kappa, Gamma, DrawColoredGraph, DrawChroCoS, RandomColoring, GenerateSeeds, MonochromeCommunityStructure, ChroCoDe
+from chrocos import K, Kappa, Gamma, DrawColoredGraph, DrawChroCoS, RandomColoring, GenerateSeeds, MonochromeCommunityStructure, ChroCoDe
 import networkx as nx
 import matplotlib.pyplot as plt
 
