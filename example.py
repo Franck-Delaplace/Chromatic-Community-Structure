@@ -52,7 +52,6 @@ def graphexample(G,position,title, transparency=0.0):
     plt.title("radius=1 - Kg="+"{:.2f}".format(K(P,cp,4,Gamma))+" - Kk="+"{:.2f}".format(K(P,cp,4,funK=Kappa)))
     DrawChroCoS(G,P, pos=position) # Display the community structure on the graph 
 
-
     #RADIUS = 2 (default value)
     print("radius=2")
     P=ChroCoDe(G,r,funK=Gamma) 
