@@ -119,4 +119,4 @@ GD=nx.grid_2d_graph(n,n)
 G = nx.convert_node_labels_to_integers(GD) # rename the vertices as integers
 
 gridposition=dict(zip(G,GD)) # define position as label of the initial graph
-graphexample(G,gridposition,"Grid with transparency", transparency=0.25)
+graphexample(G,gridposition,"Grid with transparency", transparency=0.15)
