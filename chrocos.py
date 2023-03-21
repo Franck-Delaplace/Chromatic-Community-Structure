@@ -269,7 +269,7 @@ def GenerateSeeds(G:graph_t,r:int)->list:
                 wmax=w
     seeds=[vmax,wmax]
     
-    # Next complete the seed list with nodes maximizing the mean geometric distance.
+    # Next complete the seed list with nodes maximizing the mean geometric distance to each already selected seed
     V=list(G.nodes())
     V.remove(vmax)
     V.remove(wmax) 
@@ -331,38 +331,38 @@ def ChroCoDe(G: graph_t,r:int,radius:int=2,funK:fun3int2int_t=Gamma)-> set:
     assert(r>0)
 
     colorprofile=nx.get_node_attributes(G,'color')
-    QG=nx.quotient_graph(G,MonochromeCommunityStructure(G)) # Quotient graph of the monochrome community structure
+    QG=nx.quotient_graph(G,MonochromeCommunityStructure(G)) # Quotient graph of the monochrome community structure.
     P=set(QG.nodes())
-    Pscan=P.copy()
+    Pscan=P.copy()                                          #Initialize the running community structure Pscan.                           
     
-    while Pscan:
+    while Pscan:                                            #When no improvements of P occur then Pscan will empty progressively.
         kmin=inf
         p=set()
-        for q in Pscan:                                     # find the community p in P with the minimal core chromarity
+        for q in Pscan:                                     # find the community p in P with the minimal core chromarity.
             k=K({q},colorprofile,r,funK)
             if k<kmin:
                 kmin=k
                 p=q
-        Pscan.remove(p)
+        Pscan.remove(p)                                     #remove p of the running community structure PScan.
 
-        N= list(nx.ego_graph(QG,p,radius=radius).nodes())   # compute the neighborhood of size dist but p
+        N= list(nx.ego_graph(QG,p,radius=radius).nodes())   # compute the neighborhood of size radius but p.
         N.remove(p)
         
         kmax=K(P,colorprofile,r,funK)
         improved=False
-        for q in N:                                         # find the neighbor q of p maximizing K
+        for q in N:                                         # find the neighbor q of p maximizing K by merging the path p-q.
             communitypath=set(nx.shortest_path(QG,p,q))
             pmerge = reduce(lambda p,q: p|q,communitypath)
 
             k=K((P - communitypath) | {pmerge},colorprofile,r,funK)
-            if kmax<k:
+            if kmax<k:                      
                 improved=True
                 kmax=k
                 maxpath=communitypath.copy()
                 
-        if improved:                                        # Update P with the shortest path connecting p to this neighbor 
+        if improved:                                        # Update P with the shortest path connecting p to this neighbor by merging their community.
             pmerge = reduce(lambda p,q: p|q,maxpath)
             P = (P - maxpath) | {pmerge}
-            QG=nx.quotient_graph(G,P)                       # Update the quotient graph QG and the running community set Pscan
-            Pscan=P.copy()
+            QG=nx.quotient_graph(G,P)                       # Update the quotient graph QG 
+            Pscan=P.copy()                                  # re-initialize Pscan
     return P
