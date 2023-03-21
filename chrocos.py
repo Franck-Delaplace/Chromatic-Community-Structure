@@ -14,11 +14,12 @@
 # The colors are integers from 1 to r and 0 stands for the transparent color
 
 # Import functions & packages ======================================================
-from math import dist, factorial,comb,ceil,exp,inf 
+from math import factorial,comb,ceil,exp,inf 
 from scipy.stats import gmean
 from random import choices, random
 from collections import Counter
 from functools import reduce
+from typing import Callable
 
 import networkx as nx
 import seaborn as sns
@@ -26,9 +27,12 @@ import seaborn as sns
 # graph type alias
 graph_t = nx.classes.graph.Graph
 
+# enumeration function type
+fun3int2int_t = Callable[[int,int,int],int]
+
 #** BASIC FUNCTIONS ==================================================================
 
-def CommunityColorProfile(p:frozenset,c: dict):
+def CommunityColorProfile(p:frozenset,c: dict)-> dict:
     """CleanCommunityColorProfile(p,c): Define a color profile restricted to a community
 
     Args:
@@ -40,7 +44,7 @@ def CommunityColorProfile(p:frozenset,c: dict):
     """
     return {k:v  for (k,v) in c.items() if k in p}
 
-def CleanCommunityColorProfile(p:frozenset,c: dict):
+def CleanCommunityColorProfile(p:frozenset,c: dict)-> dict:
     """CleanCommunityColorProfile(p,c): Define a color profile restricted to a community and remove the transparent profile (v:0)
 
     Args:
@@ -139,53 +143,39 @@ def Gamma(r:int,n:int,d:int)->int:
         gamma+=factorialnr//(ps*pcs)
     return gamma
 
-# Core chromarities -------------------------------------
-
-def Kck(r:int,n:int,d:int)->float:
-    """Kappa core chromarity.
-
-    Args:
-        r (int): number of colors
-        n (int): community size
-        d (int): size of nodes with the same color
-
-    Returns:
-        float: chromarity value
-    """
-    return d/n*(1-Kappa(r,n,d)/r**n)
-
-def Kcg(r:int,n:int,d:int)->float:
-       
-       """Gamma core chromarity.
+# Generic Core chromarities -------------------------------------
+def Kcore(r:int,n:int,d:int,funK:fun3int2int_t)->float:
+    """Compute the core chromarity
 
     Args:
-        r (int): number of colors
-        n (int): community size
-        d (int): size of the dominant color nodes
-
-    Returns:
-        float: chromarity value
-    """
-       return d/n*(1-Gamma(r,n,d)/r**n)
-    
-# Chromarities ------------------------------------------
-
-def Kk(P:set,c:dict,r:int)->float:
-    """"Compute the Kappa chromarity of a community structure.
-
-    Args:
-        P (set): community structure
-        c (dict): color profile
-        r (int): number of colors
+        r (int): number of colors,
+        n (int): size of a community,
+        d (int): number of nodes with the same color,
+        funK (function): enumeration function. 
 
     Returns:
         float: chromarity value.
-    """ 
+    """
+    return d/n*(1-funK(r,n,d)/r**n)
+# Generic Chromarity ------------------------------------------
+def K(P:set,c:dict,r:int,funK: fun3int2int_t=Gamma)->float:
+    """compute the chromarity 
+
+    Args:
+        P (set):  community structure,
+        c (dict):  color profile,
+        r (int): number of colors,
+        funK (fun3int2int_t, optional): enumeration function. Defaults to Gamma.
+
+    Returns:
+        float: chromarity value.
+    """
+    
     k=0
     for p in P:
         colors=CleanCommunityColorProfile(p,c).values()
         try:
-            k+=Kck(r,len(p),max(Counter(colors).values()))
+            k+=Kcore(r,len(p),max(Counter(colors).values()),funK)
         except ValueError: # case a community is empty  K(p)=0
             pass
     try:
@@ -193,32 +183,6 @@ def Kk(P:set,c:dict,r:int)->float:
     except ZeroDivisionError: #case the structure is empty K(P)=0
         chromarity=0
     return chromarity
-
-
-def Kg(P:set,c:dict,r:int)->float:
-    """"Compute the Gamma chromarity of a community structure.
-
-    Args:
-        P (set): community structure
-        c (dict): color profile
-        r (int): number of colors
-
-    Returns:
-        float: chromarity value.
-    """
-    k=0
-    for p in P:
-        colors=CleanCommunityColorProfile(p,c).values()
-        try:
-            k+=Kcg(r,len(p),max(Counter(colors).values()))
-        except ValueError: # case a community is empty  K(p)=0
-            pass
-    try:
-        chromarity = k/len(P)
-    except ZeroDivisionError:  #case the structure is empty K(P)=0
-        chromarity=0
-    return chromarity
-
 #** GRAPH =============================================================================
 
 # Display  ----------------------------------------------------------
@@ -268,22 +232,21 @@ def RandomColoring(G:graph_t,seeds:list,density:float=0.2,transparency:float=0.)
         density (float, optional): probability parameter higher the value less the colors are scattered . Defaults to 0.2.
         transparency (float, optional): probability of transparent nodes. Defaults to 0..
     """
- 
-     # sub function selecting the color from seeds w.r.t. an exponential probability law. The farther from a color seed the node, the lower the probability of the color is.
-    def ChooseColorRandomly(seeds,v):
-        return choices(range(1,len(seeds)+1),weights=[exp(-density*nx.shortest_path_length(G,seed,v)) for seed in seeds],k=1)[0]
-
     assert 0.<= density <=1.0
     assert 0.<= transparency <=1.0
     assert nx.is_connected(G) #require that a path exists for any pair of vertices.
-    
+
+     # sub function selecting the color from seeds w.r.t. an exponential probability law. The farther from a color seed the node, the lower the probability of the color is.
+    def ChooseColorRandomly(seeds:list,v):
+        return choices(range(1,len(seeds)+1),weights=[exp(-density*nx.shortest_path_length(G,seed,v)) for seed in seeds],k=1)[0]
+        
     nx.set_node_attributes(G, dict([(v,ChooseColorRandomly(seeds,v)) for v in G.nodes()]),"color")
     
     if transparency >0:
         transparent=[v for v in G.nodes() if random()< transparency]
         nx.set_node_attribute(G,dict.fromkey(transparent,0),"color")
    
-def GenerateSeeds(G:graph_t,r:int):
+def GenerateSeeds(G:graph_t,r:int)->list:
     """Generate r color seeds for graph G by maximizing the  geometric mean distance between them.
 
     Args:
@@ -327,7 +290,7 @@ def GenerateSeeds(G:graph_t,r:int):
             
 #** CHROCODE ===========================================================================
 
-def MonochromeCommunityStructure(G: graph_t):
+def MonochromeCommunityStructure(G: graph_t)-> set:
     """Compute a monochrome community structure of graph G.
 
     Args:
@@ -354,13 +317,13 @@ def MonochromeCommunityStructure(G: graph_t):
         P.add(frozenset(p))                 # add the community to the structure
     return P
 
-def ChroCoDe(G: graph_t,r:int,radius:int=2,K=Kg):
+def ChroCoDe(G: graph_t,r:int,radius:int=2,funK:fun3int2int_t=Gamma)-> set:
     """Find a chromatic community structure.
     Args:
         G (Graph): Colored undirected graph 
         r (int): number of colors
         radius (int, optional): neigborhood distance. Defaults to 2.
-        K (function, optional): Chromarity. Defaults to Kg.
+        funK (function(int,int,int)->int, optional): enumeration function counting the color profile communities. Defaults to Gamma.
 
     Returns:
         set of frozensets : community structure.
@@ -377,7 +340,7 @@ def ChroCoDe(G: graph_t,r:int,radius:int=2,K=Kg):
         kmin=inf
         p=set()
         for q in Pscan:                                     # find the community p in P with the minimal core chromarity
-            k=K({q},colorprofile,r)
+            k=K({q},colorprofile,r,funK)
             if k<kmin:
                 kmin=k
                 p=q
@@ -386,13 +349,13 @@ def ChroCoDe(G: graph_t,r:int,radius:int=2,K=Kg):
         N= list(nx.ego_graph(QG,p,radius=radius).nodes())   # compute the neighborhood of size dist but p
         N.remove(p)
         
-        kmax=K(P,colorprofile,r)
+        kmax=K(P,colorprofile,r,funK)
         improved=False
         for q in N:                                         # find the neighbor q of p maximizing K
             communitypath=set(nx.shortest_path(QG,p,q))
             pmerge = reduce(lambda p,q: p|q,communitypath)
 
-            k=K((P - communitypath) | {pmerge},colorprofile,r)
+            k=K((P - communitypath) | {pmerge},colorprofile,r,funK)
             if kmax<k:
                 improved=True
                 kmax=k

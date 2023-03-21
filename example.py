@@ -4,7 +4,7 @@
 #           and draw the chromatic community structure solution on the graphs.
 #
 
-from chrocos import Kg, Kk, DrawColoredGraph, DrawChroCoS, RandomColoring, GenerateSeeds, MonochromeCommunityStructure, ChroCoDe
+from chrocos import K,Kcore , Kappa, Gamma, DrawColoredGraph, DrawChroCoS, RandomColoring, GenerateSeeds, MonochromeCommunityStructure, ChroCoDe
 import networkx as nx
 import matplotlib.pyplot as plt
 
@@ -25,12 +25,12 @@ def graphexample(G,position,title):
 
     P0=MonochromeCommunityStructure(G)
     plt.subplot(221)
-    plt.title(title+" network: Monochrome community: Kk=%4.2f, Kg=%4.2f"%(Kk(P0,cp,4),Kg(P0,cp,4)))
+    plt.title(title+" network: Monochrome community: Kk=%4.2f, Kg=%4.2f"%(K(P0,cp,4,Kappa),K(P0,cp,4,funK=Gamma)))
     DrawColoredGraph(G,pos=position) # Display the graph 
 
     #RADIUS = 1
     print("radius=1")
-    P=ChroCoDe(G,r,radius=1,K=Kg)
+    P=ChroCoDe(G,r,radius=1,funK=Gamma)
 
     # print the community structure.
     print("P=")
@@ -38,13 +38,13 @@ def graphexample(G,position,title):
 
     # Display the result
     plt.subplot(223)
-    plt.title("radius=1 - Kg="+"{:.2f}".format(Kg(P,cp,4))+" - Kk="+"{:.2f}".format(Kk(P,cp,4)))
+    plt.title("radius=1 - Kg="+"{:.2f}".format(K(P,cp,4,Gamma))+" - Kk="+"{:.2f}".format(K(P,cp,4,funK=Kappa)))
     DrawChroCoS(G,P, pos=position) # Display the community structure on the graph 
 
 
     #RADIUS = 2 (default value)
     print("radius=2")
-    P=ChroCoDe(G,r,K=Kg) 
+    P=ChroCoDe(G,r,funK=Gamma) 
 
     #   print the community structure.
     print("P=")
@@ -52,7 +52,7 @@ def graphexample(G,position,title):
 
     # Display the result
     plt.subplot(224)
-    plt.title("radius=2 - Kg="+"{:.2f}".format(Kg(P,cp,4))+" - Kk="+"{:.2f}".format(Kk(P,cp,4)))
+    plt.title("radius=2 - Kg="+"{:.2f}".format(K(P,cp,4,Gamma))+" - Kk="+"{:.2f}".format(K(P,cp,4,funK=Kappa)))
     DrawChroCoS(G,P, theme="pastel", pos=position) # Display the community structure on the graph 
 
     #Show 
