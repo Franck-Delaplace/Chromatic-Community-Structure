@@ -9,18 +9,29 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 def printcommunities(P):
-    """print the community structure"""
+    """print the community structure
+
+    Args:
+        P (set[frozenset]): community structure.
+    """
     for p in P:
         s=''
         for v in p:
             s+=(' '+str(v))
         print('{',s,'}')
 
-def graphexample(G,position,title):
-    """Example of ChroCoDe computation on a graph."""
+def graphexample(G,position,title, transparency=0.0):
+    """"Example of ChroCoDe computation on a graph.
+
+    Args:
+        G (Graph): initial graph
+        position (dict): node position 
+        title (str): title of the figure
+        transparency (float, optional): probability of transparent nodes. Defaults to 0.0.
+    """
 
     seeds=GenerateSeeds(G,r) # generate seeds - they represent the 'corners' of the grid graph.
-    RandomColoring(G,seeds,density=0.3) # color the graph randomly. 
+    RandomColoring(G,seeds,density=0.3, transparency=transparency) # color the graph randomly. 
     cp = nx.get_node_attributes(G,"color") #get the color profile.
 
     P0=MonochromeCommunityStructure(G)
@@ -101,3 +112,12 @@ G=SFG.to_undirected()
 
 position=nx.spring_layout(G)
 graphexample(G,position,"Scale Free")
+# GRID with Transparent color ===============================================
+print("GRID GRAPH")
+plt.figure(figsize=(10, 10)) #set size of the output graphic view
+n=8
+GD=nx.grid_2d_graph(n,n)
+G = nx.convert_node_labels_to_integers(GD) # rename the vertices as integers
+
+gridposition=dict(zip(G,GD)) # define position as label of the initial graph
+graphexample(G,gridposition,"Grid with transparency", transparency=0.25)

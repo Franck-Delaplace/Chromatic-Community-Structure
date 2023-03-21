@@ -21,7 +21,6 @@ from collections import Counter
 from collections.abc import Callable
 from functools import reduce
 
-
 import networkx as nx
 import seaborn as sns
 
@@ -245,7 +244,7 @@ def RandomColoring(G:graph_t,seeds:list,density:float=0.2,transparency:float=0.)
     
     if transparency >0:
         transparent=[v for v in G.nodes() if random()< transparency]
-        nx.set_node_attribute(G,dict.fromkey(transparent,0),"color")
+        nx.set_node_attributes(G,dict.fromkeys(transparent,0),"color")
    
 def GenerateSeeds(G:graph_t,r:int)->list:
     """Generate r color seeds for graph G by maximizing the  geometric mean distance between them.
