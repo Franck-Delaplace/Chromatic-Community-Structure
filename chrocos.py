@@ -110,8 +110,6 @@ def Kappa(r:int,n:int,d:int) -> int:
     Returns:
         int: number of communities complying with these requirements.
     """
-    assert r >=0
-    assert n >= d >=0
     kappa=0
     for k in range(1, min(r,n//d)+1):
         kappa+= ((-1)**(k-1)*comb(r,k)*factorial(n)*(r-k)**(n-k*d)) // (factorial(n-k*d)*factorial(d)**k)
@@ -128,8 +126,6 @@ def Gamma(r:int,n:int,d:int)->int:
     Returns:
         int: number of communities complying with these requirements.
     """
-    assert r >=0
-    assert n >= d >=0
     gamma=0
     factorialnr=factorial(n)*factorial(r)
     
@@ -156,6 +152,8 @@ def Kcore(r:int,n:int,d:int,funK:fun3int2int_t)->float:
     Returns:
         float: chromarity value.
     """
+    assert r > 0
+    assert n >= d >=0
     return d/n*(1-funK(r,n,d)/r**n)
 # Generic Chromarity ------------------------------------------
 def K(P:set,c:dict,r:int,funK: fun3int2int_t=Gamma)->float:
