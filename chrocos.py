@@ -15,6 +15,7 @@
 
 # ** Import functions & packages, typing ======================================================
 from math import factorial, comb, ceil, exp, inf
+from typing import TypeAlias
 from scipy.stats import gmean
 from random import choices, random
 from collections import Counter
@@ -25,10 +26,10 @@ import networkx as nx
 import seaborn as sns
 
 # graph type alias
-graph_t = nx.classes.graph.Graph
+graph_t:TypeAlias = nx.classes.graph.Graph
 
 # enumeration function type
-fun3int2int_t = Callable[[int, int, int], int]
+fun3int2int_t:TypeAlias = Callable[[int, int, int], int]
 
 # ** BASIC FUNCTIONS ==================================================================
 
@@ -90,13 +91,13 @@ def DominantSigs(r: int, n: int, d: int) -> list[list[int]]:
         return ds
 
     # main
+    domsigset=[] # type:list[list[int]] 
     if r == 0:
         if n == 0:
-            domsigset = [[]]
-        else:
-            domsigset = []
+            domsigset = [[]] 
     else:
         domsigset = DSS(r - 1, n - d, d, [d])
+
     return domsigset
 
 
@@ -413,7 +414,7 @@ def ChroCoDe(G: graph_t, r: int, radius: int = 2, funK: fun3int2int_t = Gamma) -
         N.remove(p)
 
         kmax = K(P, colorprofile, r, funK)
-        maxpath = {}
+        maxpath = set() 
         improved = False
         for q in N:  # find the neighbor q of p maximizing K by merging the path p-q.
             communitypath = set(nx.shortest_path(QG, p, q))
