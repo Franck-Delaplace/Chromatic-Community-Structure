@@ -33,7 +33,6 @@ fun3int2int_t:TypeAlias = Callable[[int, int, int], int]
 
 # ** BASIC FUNCTIONS ==================================================================
 
-
 def CommunityColorProfile(p: frozenset, c: dict) -> dict:
     """CleanCommunityColorProfile(p,c): Define a color profile restricted to a community
 
