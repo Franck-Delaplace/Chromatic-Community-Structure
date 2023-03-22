@@ -15,11 +15,11 @@
 
 # ** Import functions & packages, typing ======================================================
 from math import factorial, comb, ceil, exp, inf
-from typing import TypeAlias
+from typing import TypeAlias, Callable
 from scipy.stats import gmean
 from random import choices, random
 from collections import Counter
-from collections.abc import Callable
+
 from functools import reduce
 
 import networkx as nx
