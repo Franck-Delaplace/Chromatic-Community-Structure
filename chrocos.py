@@ -330,9 +330,7 @@ def GenerateSeeds(G: graph_t, r: int) -> list:
         maxi = 0
         vmax = None
         for v in V:
-            disttoseeds = [
-                pathlength[v][seed] for seed in seeds if seed in pathlength[v]
-            ]
+            disttoseeds = [pathlength[v][seed] for seed in seeds if seed in pathlength[v]]
             if disttoseeds:
                 meandisttoseeds = gmean(disttoseeds)
                 if meandisttoseeds > maxi:
