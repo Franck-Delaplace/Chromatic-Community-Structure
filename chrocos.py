@@ -45,7 +45,6 @@ def CommunityColorProfile(p: frozenset, c: dict) -> dict:
     """
     return {k: v for (k, v) in c.items() if k in p}
 
-
 def CleanCommunityColorProfile(p: frozenset, c: dict) -> dict:
     """CleanCommunityColorProfile(p,c): Define a color profile restricted to a community and remove the transparent profile (v:0)
 
@@ -57,7 +56,6 @@ def CleanCommunityColorProfile(p: frozenset, c: dict) -> dict:
     dict: comunity color profile.
     """
     return {k: v for (k, v) in c.items() if k in p and v != 0}
-
 
 def DominantSigs(r: int, n: int, d: int) -> list[list[int]]:
     """compute all the d-dominant signatures (list) for community of size n considering r colors.
@@ -104,7 +102,6 @@ def DominantSigs(r: int, n: int, d: int) -> list[list[int]]:
 
 # Enumeration --------------------------------------------------
 
-
 def Kappa(r: int, n: int, d: int) -> int:
     """Count the number of d-coloring profiles of size n considering r colors.
 
@@ -122,7 +119,6 @@ def Kappa(r: int, n: int, d: int) -> int:
             (-1) ** (k - 1) * comb(r, k) * factorial(n) * (r - k) ** (n - k * d)
         ) // (factorial(n - k * d) * factorial(d) ** k)
     return kappa
-
 
 def Gamma(r: int, n: int, d: int) -> int:
     """Count the number of d-dominant coloring profiles of size n considering r colors.
@@ -148,7 +144,6 @@ def Gamma(r: int, n: int, d: int) -> int:
         gamma += factorialnr // (ps * pcs)
     return gamma
 
-
 # Generic Core chromarities -------------------------------------
 def Kcore(r: int, n: int, d: int, funK: fun3int2int_t) -> float:
     """Compute the core chromarity
@@ -165,7 +160,6 @@ def Kcore(r: int, n: int, d: int, funK: fun3int2int_t) -> float:
     assert r > 0
     assert n >= d >= 0
     return d / n * (1 - funK(r, n, d) / r**n)
-
 
 # Generic Chromarity ------------------------------------------
 def K(P: set, c: dict, r: int, funK: fun3int2int_t = Gamma) -> float:
@@ -194,14 +188,13 @@ def K(P: set, c: dict, r: int, funK: fun3int2int_t = Gamma) -> float:
         chromarity = 0
     return chromarity
 
-
 # ** GRAPH =============================================================================
 
 # Display  ----------------------------------------------------------
 
 # Default palette
 __chrocos_palette__ = {
-    0: "lightgray",
+    0: "gainsboro",
     1: "lightgreen",
     2: "crimson",
     3: "gold",
@@ -209,18 +202,22 @@ __chrocos_palette__ = {
     5: "mediumpurple",
     6: "darkorange",
     7: "burlywood",
+    8: "salmon",
+    9: "orchid",
+    10:"darkorange",
+    9: "orchid",
+    10:"darkorange",
 }
 
 # Default font
 __font__ = "Franklin Gothic Heavy"  # other nice fonts  'Tahoma'  'Impact'
-
 
 def DrawColoredGraph(G, palette: dict[int, str] = __chrocos_palette__, pos=None):
     """Display a colored graph
 
     Args:
         G (Graph): colored graph
-        palette (dict[int,str], optional): color palette associating a color to integer. Defaults to __chrocos_palette__ (6 colors).
+        palette (dict[int,str], optional): color palette associating a color to integer. Defaults to __chrocos_palette__ (up to 10 colors).
         pos (dict|None, optional): node position. Defaults to None.
     """
     color = nx.get_node_attributes(G, "color")
@@ -244,7 +241,7 @@ def DrawChroCoS(G, P: set[frozenset], theme: str = "Set2", pos=None):
         theme (str, optional): theme color of seaborn package. Defaults to 'Set2'.
         pos (dict|None, optional): position of nodes. Defaults to None.
     """
-
+    
     Pl = list(P)
     palette = sns.color_palette(theme, len(Pl))
     color = {v: palette[i] for i in range(len(Pl)) for v in Pl[i]}
@@ -293,7 +290,6 @@ def RandomColoring(
     if transparency > 0:
         transparent = [v for v in G.nodes() if random() < transparency]
         nx.set_node_attributes(G, dict.fromkeys(transparent, 0), "color")
-
 
 def GenerateSeeds(G: graph_t, r: int) -> list:
     """Generate r color seeds for graph G by maximizing the  geometric mean distance between them.
