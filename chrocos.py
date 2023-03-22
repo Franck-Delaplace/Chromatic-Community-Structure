@@ -236,7 +236,6 @@ def DrawColoredGraph(G, palette: dict[int, str] = __chrocos_palette__, pos=None)
         font_family=__font__,
     )
 
-
 # Display the community structure on graph
 def DrawChroCoS(G, P: set[frozenset], theme: str = "Set2", pos=None):
     """Display the chromarity structure on a graph. The nodes of the same community are the same color.
@@ -262,7 +261,6 @@ def DrawChroCoS(G, P: set[frozenset], theme: str = "Set2", pos=None):
     )
 
 # Random Graph  --------------------------------------------------
-
 
 def RandomColoring(
     G: graph_t, seeds: list, density: float = 0.2, transparency: float = 0.0
@@ -422,5 +420,3 @@ def ChroCoDe(G: graph_t, r: int, radius: int = 2, funK: fun3int2int_t = Gamma) -
             QG = nx.quotient_graph(G, P)  # Update the quotient graph QG
             Pscan = P.copy()  # re-initialize Pscan
     return P
-
-# END
