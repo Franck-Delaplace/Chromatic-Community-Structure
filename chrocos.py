@@ -88,7 +88,7 @@ def DominantSigs(r:int,n:int,d:int)-> list[list[int]]:
     # main
     if r==0:
         if n==0:
-            domsigset= [[]]
+            domsigset=[[]]
         else:
             domsigset= []
     else:
@@ -236,7 +236,7 @@ def RandomColoring(G:graph_t,seeds:list,density:float=0.2,transparency:float=0.)
     assert nx.is_connected(G) #require that a path exists for any pair of vertices.
 
      # sub function selecting the color from seeds w.r.t. an exponential probability law. The farther from a color seed the node, the lower the probability of the color is.
-    def ChooseColorRandomly(seeds:list,v):
+    def ChooseColorRandomly(seeds:list,v)->int:
         return choices(range(1,len(seeds)+1),weights=[exp(-density*nx.shortest_path_length(G,seed,v)) for seed in seeds],k=1)[0]
         
     nx.set_node_attributes(G, dict([(v,ChooseColorRandomly(seeds,v)) for v in G.nodes()]),"color")
@@ -260,7 +260,7 @@ def GenerateSeeds(G:graph_t,r:int)->list:
 
     # first select two nodes with a maximal distance
     maxi=0
-    v=w=next(iter(pathlength))
+    v=w=vmax=wmax=next(iter(pathlength))
     for v,vpathlength in pathlength.items():
         for w,distance in vpathlength.items():
             if distance>maxi:
@@ -349,6 +349,7 @@ def ChroCoDe(G: graph_t,r:int,radius:int=2,funK:fun3int2int_t=Gamma)-> set:
         N.remove(p)
         
         kmax=K(P,colorprofile,r,funK)
+        maxpath={}
         improved=False
         for q in N:                                         # find the neighbor q of p maximizing K by merging the path p-q.
             communitypath=set(nx.shortest_path(QG,p,q))
