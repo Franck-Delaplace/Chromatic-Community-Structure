@@ -426,9 +426,7 @@ def ChroCoDe(G: graph_t, r: int, radius: int = 2, funK: fun3int2int_t = Gamma) -
                 kmax = k
                 maxpath = communitypath.copy()
 
-        if (
-            improved
-        ):  # Update P with the shortest path connecting p to this neighbor by merging their community.
+        if improved:  # Update P with the shortest path connecting p to this neighbor by merging their community.
             pmerge = reduce(lambda p, q: p | q, maxpath)
             P = (P - maxpath) | {pmerge}
             QG = nx.quotient_graph(G, P)  # Update the quotient graph QG
