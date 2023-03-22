@@ -13,7 +13,7 @@
 #   - d is the number of nodes with the same color. 0<=d<=n
 # The colors are integers from 1 to r and 0 stands for the transparent color
 
-# ** Import functions & packages, typing ======================================================
+# ** Import functions & packages, typing ==================================================
 from math import factorial, comb, ceil, exp, inf
 from typing import TypeAlias, Callable
 from scipy.stats import gmean
