@@ -13,7 +13,7 @@ from chrocos import (
     RandomColoring,
     GenerateSeeds,
     MonochromeCommunityStructure,
-    ChroCoDe,
+    ChroCoDe
 )
 import networkx as nx
 import matplotlib.pyplot as plt
@@ -145,7 +145,7 @@ G = SFG.to_undirected()
 position = nx.spring_layout(G)
 graphexample(G, position, "Scale Free")
 # GRID with Transparent color ===============================================
-print("GRID GRAPH")
+print("GRID GRAPH WITH TRANSPARENCY")
 plt.figure(figsize=(10, 10))  # set size of the output graphic view
 n = 8
 GD = nx.grid_2d_graph(n, n)
