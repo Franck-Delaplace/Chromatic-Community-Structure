@@ -366,3 +366,4 @@ def ChroCoDe(G: graph_t,r:int,radius:int=2,funK:fun3int2int_t=Gamma)-> set:
             QG=nx.quotient_graph(G,P)                       # Update the quotient graph QG 
             Pscan=P.copy()                                  # re-initialize Pscan
     return P
+#END
