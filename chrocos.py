@@ -261,7 +261,6 @@ def DrawChroCoS(G, P: set[frozenset], theme: str = "Set2", pos=None):
         font_family=__font__,
     )
 
-
 # Random Graph  --------------------------------------------------
 
 
@@ -343,9 +342,7 @@ def GenerateSeeds(G: graph_t, r: int) -> list:
         V.remove(vmax)
     return seeds
 
-
 # ** CHROCODE ===========================================================================
-
 
 def MonochromeCommunityStructure(G: graph_t) -> set:
     """Compute a monochrome community structure of graph G.
@@ -376,7 +373,6 @@ def MonochromeCommunityStructure(G: graph_t) -> set:
         P.add(frozenset(p))  # add the community to the structure
     return P
 
-
 def ChroCoDe(G: graph_t, r: int, radius: int = 2, funK: fun3int2int_t = Gamma) -> set:
     """Find a chromatic community structure.
     Args:
@@ -392,9 +388,7 @@ def ChroCoDe(G: graph_t, r: int, radius: int = 2, funK: fun3int2int_t = Gamma) -
     assert r > 0
 
     colorprofile = nx.get_node_attributes(G, "color")
-    QG = nx.quotient_graph(
-        G, MonochromeCommunityStructure(G)
-    )  # Quotient graph of the monochrome community structure.
+    QG = nx.quotient_graph(G, MonochromeCommunityStructure(G))  # Quotient graph of the monochrome community structure.
     P = set(QG.nodes())
     Pscan = P.copy()  # Initialize the running community structure Pscan.
 
@@ -408,9 +402,7 @@ def ChroCoDe(G: graph_t, r: int, radius: int = 2, funK: fun3int2int_t = Gamma) -
                 p = q
         Pscan.remove(p)  # remove p of the running community structure PScan.
 
-        N = list(
-            nx.ego_graph(QG, p, radius=radius).nodes()
-        )  # compute the neighborhood of size radius but p.
+        N = list(nx.ego_graph(QG, p, radius=radius).nodes())  # compute the neighborhood of size radius but p.
         N.remove(p)
 
         kmax = K(P, colorprofile, r, funK)
@@ -432,6 +424,5 @@ def ChroCoDe(G: graph_t, r: int, radius: int = 2, funK: fun3int2int_t = Gamma) -
             QG = nx.quotient_graph(G, P)  # Update the quotient graph QG
             Pscan = P.copy()  # re-initialize Pscan
     return P
-
 
 # END
