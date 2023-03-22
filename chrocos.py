@@ -169,7 +169,7 @@ def K(P:set,c:dict,r:int,funK: fun3int2int_t=Gamma)->float:
         float: chromarity value.
     """
     
-    k=0
+    k=0.0
     for p in P:
         colors=CleanCommunityColorProfile(p,c).values()
         try:
