@@ -1,4 +1,4 @@
-# CHOMATIC COMMUNITY STRUCTURE
+# CHROMATIC COMMUNITY STRUCTURE
 # AUTHOR : Franck Delaplace
 # CREATION DATE: 12/03/2023
 
@@ -21,7 +21,6 @@ from random import choices, random
 from collections import Counter
 
 from functools import reduce
-
 import networkx as nx
 import seaborn as sns
 
@@ -38,7 +37,7 @@ def CommunityColorProfile(p: frozenset, c: dict) -> dict:
 
     Args:
         p (set): community
-        c (dict): color profil
+        c (dict): color profile
 
     Returns:
     dict: community color profile.
@@ -50,10 +49,10 @@ def CleanCommunityColorProfile(p: frozenset, c: dict) -> dict:
 
     Args:
         p (set): community
-        c (dict): color profil
+        c (dict): color profile
 
     Returns:
-    dict: comunity color profile.
+    dict: community color profile.
     """
     return {k: v for (k, v) in c.items() if k in p and v != 0}
 
@@ -264,7 +263,7 @@ def RandomColoring(
     """Attributes colors to nodes of graph G randomly.
 
     Args:
-        G (Graph): unidrected graph that must be a single component.
+        G (Graph): undirected graph that must be a single component.
         seeds (list): list of seeds (nodes)
         density (float, optional): probability parameter higher the value less the colors are scattered . Defaults to 0.2.
         transparency (float, optional): probability of transparent nodes. Defaults to 0.
@@ -340,7 +339,7 @@ def MonochromeCommunityStructure(G: graph_t) -> set:
         G (Graph): Undirected colored graph
 
     Returns:
-        set of frozensets : community structure
+        set[frozenset[node]] : community structure
     """
     pendingnodes = set(G.nodes())
     P = set()
@@ -371,7 +370,7 @@ def ChroCoDe(G: graph_t, r: int, radius: int = 2, funK: fun3int2int_t = Gamma) -
         funK (function(int,int,int)->int, optional): enumeration function counting the color profile communities. Defaults to Gamma.
 
     Returns:
-        set of frozensets : community structure.
+        set[frozenset[node]] : community structure.
     """
     assert radius >= 1
     assert r > 0
