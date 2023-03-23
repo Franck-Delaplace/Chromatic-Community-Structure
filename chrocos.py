@@ -33,29 +33,18 @@ fun3int2int_t:TypeAlias = Callable[[int, int, int], int]
 
 # ** BASIC FUNCTIONS ==================================================================
 
-def CommunityColorProfile(p: frozenset, c: dict) -> dict:
-    """CleanCommunityColorProfile(p,c): Define a color profile restricted to a community
+def CommunityColorProfile(p: frozenset, c: dict, basic=True) -> dict:
+    """Define a color profile restricted to a community
 
     Args:
-        p (set): community
+        p (frozenset): community
         c (dict): color profile
+        basic (bool, optional):Boolean setting whether the transparent color node should be removed (False) or not (True). Defaults to True.
 
     Returns:
-    dict: community color profile.
+        dict: _description_
     """
-    return {k: v for (k, v) in c.items() if k in p}
-
-def CleanCommunityColorProfile(p: frozenset, c: dict) -> dict:
-    """CleanCommunityColorProfile(p,c): Define a color profile restricted to a community and remove the transparent profile (v:0)
-
-    Args:
-        p (set): community
-        c (dict): color profile
-
-    Returns:
-    dict: community color profile.
-    """
-    return {k: v for (k, v) in c.items() if k in p and v != 0}
+    return  {k: v for (k, v) in c.items() if k in p and (basic or v != 0 )}
 
 def DominantSigs(r: int, n: int, d: int) -> list[list[int]]:
     """compute all the d-dominant signatures (list) for community of size n considering r colors.
@@ -176,7 +165,7 @@ def K(P: set, c: dict, r: int, funK: fun3int2int_t = Gamma) -> float:
 
     k = 0.0
     for p in P:
-        colors = CleanCommunityColorProfile(p, c).values()
+        colors = CommunityColorProfile(p, c, basic=False).values()
         try:
             k += Kcore(r, len(p), max(Counter(colors).values()), funK)
         except ValueError:  # case if a community is empty  K(p)=0
