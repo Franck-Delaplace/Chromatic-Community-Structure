@@ -16,13 +16,13 @@
 # ** Import functions & packages, typing ==================================================
 from math import factorial, comb, ceil, exp, inf
 from typing import TypeAlias, Callable
-from scipy.stats import gmean
+from scipy.stats import gmean  # type: ignore
 from random import choices, random
 from collections import Counter
 
 from functools import reduce
 import networkx as nx
-import seaborn as sns
+import seaborn as sns  # type: ignore
 
 # graph type alias
 graph_t:TypeAlias = nx.classes.graph.Graph
@@ -69,7 +69,7 @@ def DominantSigs(r: int, n: int, d: int) -> list[list[int]]:
     """
     assert r >= 0
     assert n >= d >= 0
-    # sub function of Dominant signatures (depth=depth, rest=remaining valye for which elements to sum must be found, dbound= max bound value, sig= signature)
+    # sub function of Dominant signatures (depth=depth, rest=remaining value for which elements to sum must be found, dbound= max bound value, sig= signature)
     def DSS(depth: int, rest: int, dbound: int, sig: list):
         if rest == 0:
             ds = [depth * [0] + sig]
@@ -345,7 +345,7 @@ def MonochromeCommunityStructure(G: graph_t) -> set:
     P = set()
     while pendingnodes:
         v = next(iter(pendingnodes))  # take the first available node
-        referencecolor = G.nodes[v]["color"]  # get its color used as reference colore
+        referencecolor = G.nodes[v]["color"]  # get its color used as reference color
         p = set()
         monochromeneighbors = {v}
         while monochromeneighbors:
@@ -355,9 +355,7 @@ def MonochromeCommunityStructure(G: graph_t) -> set:
                 if G.nodes[w]["color"] == referencecolor and not w in p:
                     monochromeneighbors.add(w)
 
-        pendingnodes = (
-            pendingnodes - p
-        )  # remove the community of the examined vertices.
+        pendingnodes = pendingnodes - p  # remove the community of the examined vertices.
         P.add(frozenset(p))  # add the community to the structure
     return P
 

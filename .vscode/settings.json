@@ -1,19 +1,30 @@
 {
     "cSpell.words": [
         "Chro",
+        "chrocos",
         "chromarities",
         "colorprofile",
         "communitypath",
+        "dbound",
+        "disttoseeds",
         "domsigset",
         "factorialnr",
+        "graphexample",
         "Kcore",
         "kmin",
+        "matplotlib",
         "maxpath",
         "monochromeneighbors",
         "networkx",
+        "pathlength",
         "pendingnodes",
         "pmerge",
+        "printcommunities",
         "Pscan",
-        "referencecolor"
+        "pyplot",
+        "referencecolor",
+        "vmax",
+        "vpathlength",
+        "wmax"
     ]
 }
