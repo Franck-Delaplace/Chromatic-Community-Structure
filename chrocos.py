@@ -96,7 +96,6 @@ def DominantSigs(r: int, n: int, d: int) -> list[list[int]]:
 
     return domsigset
 
-
 # ** CHROMARITIES =========================================================================
 
 # Enumeration --------------------------------------------------
@@ -257,9 +256,7 @@ def DrawChroCoS(G, P: set[frozenset], theme: str = "Set2", pos=None):
 
 # Random Graph  --------------------------------------------------
 
-def RandomColoring(
-    G: graph_t, seeds: list, density: float = 0.2, transparency: float = 0.0
-):
+def RandomColoring(G: graph_t, seeds: list, density: float = 0.2, transparency: float = 0.0):
     """Attributes colors to nodes of graph G randomly.
 
     Args:
