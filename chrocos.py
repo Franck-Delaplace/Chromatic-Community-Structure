@@ -366,7 +366,7 @@ def ChroCoDe(G: graph_t, r: int, radius: int = 2, funK: fun3int2int_t = Gamma) -
     Args:
         G (Graph): Colored undirected graph
         r (int): number of colors
-        radius (int, optional): neigborhood distance. Defaults to 2.
+        # radius (int, optional): neighborhood distance. Defaults to 2.
         funK (function(int,int,int)->int, optional): enumeration function counting the color profile communities. Defaults to Gamma.
 
     Returns:
