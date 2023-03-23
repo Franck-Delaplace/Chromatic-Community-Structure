@@ -236,8 +236,8 @@ def DrawColoredGraph(G, palette: dict[int, str] = __chrocos_palette__, pos=None)
 def DrawChroCoS(G, P: set[frozenset], theme: str = "Set2", pos=None):
     """Display the chromarity structure on a graph. The nodes of the same community are the same color.
     Args:
-        G (Graph): _Undirected colored graph_
-        P (set[frozenset]): _community structure_
+        G (Graph): Undirected colored graph_
+        P (set[frozenset]): community structure_
         theme (str, optional): theme color of seaborn package. Defaults to 'Set2'.
         pos (dict|None, optional): position of nodes. Defaults to None.
     """
@@ -267,7 +267,7 @@ def RandomColoring(
         G (Graph): unidrected graph that must be a single component.
         seeds (list): list of seeds (nodes)
         density (float, optional): probability parameter higher the value less the colors are scattered . Defaults to 0.2.
-        transparency (float, optional): probability of transparent nodes. Defaults to 0..
+        transparency (float, optional): probability of transparent nodes. Defaults to 0.
     """
     assert 0.0 <= density <= 1.0
     assert 0.0 <= transparency <= 1.0
@@ -283,9 +283,7 @@ def RandomColoring(
             k=1,
         )[0]
 
-    nx.set_node_attributes(
-        G, dict([(v, ChooseColorRandomly(seeds, v)) for v in G.nodes()]), "color"
-    )
+    nx.set_node_attributes( G, dict([(v, ChooseColorRandomly(seeds, v)) for v in G.nodes()]), "color")
 
     if transparency > 0:
         transparent = [v for v in G.nodes() if random() < transparency]
