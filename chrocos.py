@@ -276,9 +276,7 @@ def RandomColoring(
     def ChooseColorRandomly(seeds: list, v) -> int:
         return choices(
             range(1, len(seeds) + 1),
-            weights=[
-                exp(-density * nx.shortest_path_length(G, seed, v)) for seed in seeds
-            ],
+            weights=[exp(-density * nx.shortest_path_length(G, seed, v)) for seed in seeds],
             k=1,
         )[0]
 
