@@ -1,8 +1,9 @@
-# CHROMATIC COMMUNITY STRUCTURE
+
+# ** CHROMATIC COMMUNITY STRUCTURE
 # AUTHOR : Franck Delaplace
 # CREATION DATE: 12/03/2023
 
-# ** DATA STRUCTURES
+# ! DATA STRUCTURES
 # a community p is a (frozen) set of nodes p=frozenset({n1,n2,...})
 # a community structure P is a set of frozen node sets  P=[p1,p2,...] where pi is a frozenset.
 # a color profile c is defined by a dictionary {node:color ...}.
