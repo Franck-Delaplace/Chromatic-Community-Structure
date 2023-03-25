@@ -1,11 +1,12 @@
-#
+""" Chromatic Community Structure (ChroCos) analysis module."""
 # ** CHROMATIC COMMUNITY STRUCTURE
 # AUTHOR : Franck Delaplace
 # CREATION DATE: 12/03/2023
 
 # ! DATA STRUCTURES
 # a community p is a (frozen) set of nodes p=frozenset({n1,n2,...})
-# a community structure P is a set of frozen node sets  P=[p1,p2,...] where pi is a frozenset.
+# a community structure P is a set of frozen node sets:
+# P=[p1,p2,...] where pi is a frozenset.
 # a color profile c is defined by a dictionary {node:color ...}.
 
 # Throughout the functions:
@@ -14,7 +15,7 @@
 #   - d is the number of nodes with the same color. 0<=d<=n
 # The colors are integers from 1 to r and 0 stands for the transparent color
 
-# ** Import functions & packages, typing ==================================================
+# ** Import functions & packages, typing ====================================
 from math import factorial, comb, ceil, exp, inf
 from typing import TypeAlias, Callable
 from random import choices, random
@@ -31,7 +32,7 @@ graph_t: TypeAlias = nx.classes.graph.Graph
 # enumeration function type
 fun3int2int_t: TypeAlias = Callable[[int, int, int], int]
 
-# ** BASIC FUNCTIONS ==================================================================
+# ** BASIC FUNCTIONS =====================================================
 
 
 def CommunityColorProfile(p: frozenset, c: dict, basic=True) -> dict:
@@ -40,7 +41,8 @@ def CommunityColorProfile(p: frozenset, c: dict, basic=True) -> dict:
     Args:
         p (frozenset): community
         c (dict): color profile
-        basic (bool, optional):Boolean setting whether the transparent color node should be removed (False) or not (True). Defaults to True.
+        basic (bool, optional): Boolean setting whether the transparent color node
+                                should be removed (False) or not (True). Defaults to True.
 
     Returns:
         dict: _description_
@@ -62,7 +64,8 @@ def DominantSigs(r: int, n: int, d: int) -> list[list[int]]:
     assert r >= 0
     assert n >= d >= 0
 
-    # sub function of Dominant signatures (depth=depth, rest=remaining value for which elements to sum must be found, dbound= max bound value, sig= signature)
+    # sub function of Dominant signatures
+    # depth=depth, rest=remaining value for which elements to sum must be found, dbound= max bound value, sig= signature)
     def DSS(depth: int, rest: int, dbound: int, sig: list):
         if rest == 0:
             ds = [depth * [0] + sig]
@@ -89,7 +92,7 @@ def DominantSigs(r: int, n: int, d: int) -> list[list[int]]:
 
     return domsigset
 
-# ** CHROMARITIES =========================================================================
+# ** CHROMARITIES ===========================================================
 
 # Enumeration --------------------------------------------------
 
@@ -346,7 +349,7 @@ def MonochromeCommunityStructure(G: graph_t) -> set:
             v = monochromeneighbors.pop()  # take a node for including its neighbors
             p.add(v)  # add the current node to the community
             for w in G[v]:  # extend the neighbor set with the same color
-                if G.nodes[w]["color"] == referencecolor and  w not in p:
+                if G.nodes[w]["color"] == referencecolor and w not in p:
                     monochromeneighbors.add(w)
 
         pendingnodes = pendingnodes - p  # remove the community of the examined vertices.

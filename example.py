@@ -1,3 +1,4 @@
+""" Example of ChroCoS application"""
 # AUTHOR : Franck Delaplace
 # CREATION DATE: 17/03/2023
 # OBJECT:   this script shows the basic use of the ChroCoDe algorithm on different graphs
