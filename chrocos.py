@@ -1,4 +1,4 @@
-
+#
 # ** CHROMATIC COMMUNITY STRUCTURE
 # AUTHOR : Franck Delaplace
 # CREATION DATE: 12/03/2023
@@ -17,21 +17,22 @@
 # ** Import functions & packages, typing ==================================================
 from math import factorial, comb, ceil, exp, inf
 from typing import TypeAlias, Callable
-from scipy.stats import gmean  # type: ignore
 from random import choices, random
 from collections import Counter
-
 from functools import reduce
+from scipy.stats import gmean  # type: ignore
+
 import networkx as nx
 import seaborn as sns  # type: ignore
 
 # graph type alias
-graph_t:TypeAlias = nx.classes.graph.Graph
+graph_t: TypeAlias = nx.classes.graph.Graph
 
 # enumeration function type
-fun3int2int_t:TypeAlias = Callable[[int, int, int], int]
+fun3int2int_t: TypeAlias = Callable[[int, int, int], int]
 
 # ** BASIC FUNCTIONS ==================================================================
+
 
 def CommunityColorProfile(p: frozenset, c: dict, basic=True) -> dict:
     """Define a color profile restricted to a community
@@ -44,7 +45,8 @@ def CommunityColorProfile(p: frozenset, c: dict, basic=True) -> dict:
     Returns:
         dict: _description_
     """
-    return  {k: v for (k, v) in c.items() if k in p and (basic or v != 0 )}
+    return {k: v for (k, v) in c.items() if k in p and (basic or v != 0)}
+
 
 def DominantSigs(r: int, n: int, d: int) -> list[list[int]]:
     """compute all the d-dominant signatures (list) for community of size n considering r colors.
@@ -59,6 +61,7 @@ def DominantSigs(r: int, n: int, d: int) -> list[list[int]]:
     """
     assert r >= 0
     assert n >= d >= 0
+
     # sub function of Dominant signatures (depth=depth, rest=remaining value for which elements to sum must be found, dbound= max bound value, sig= signature)
     def DSS(depth: int, rest: int, dbound: int, sig: list):
         if rest == 0:
@@ -77,10 +80,10 @@ def DominantSigs(r: int, n: int, d: int) -> list[list[int]]:
         return ds
 
     # main
-    domsigset=[] # type:list[list[int]] 
+    domsigset = []  # type:list[list[int]]
     if r == 0:
         if n == 0:
-            domsigset = [[]] 
+            domsigset = [[]]
     else:
         domsigset = DSS(r - 1, n - d, d, [d])
 
@@ -89,6 +92,7 @@ def DominantSigs(r: int, n: int, d: int) -> list[list[int]]:
 # ** CHROMARITIES =========================================================================
 
 # Enumeration --------------------------------------------------
+
 
 def Kappa(r: int, n: int, d: int) -> int:
     """Count the number of d-coloring profiles of size n considering r colors.
@@ -107,6 +111,7 @@ def Kappa(r: int, n: int, d: int) -> int:
             (-1) ** (k - 1) * comb(r, k) * factorial(n) * (r - k) ** (n - k * d)
         ) // (factorial(n - k * d) * factorial(d) ** k)
     return kappa
+
 
 def Gamma(r: int, n: int, d: int) -> int:
     """Count the number of d-dominant coloring profiles of size n considering r colors.
@@ -132,6 +137,7 @@ def Gamma(r: int, n: int, d: int) -> int:
         gamma += factorialnr // (ps * pcs)
     return gamma
 
+
 # Generic Core chromarities -------------------------------------
 def Kcore(r: int, n: int, d: int, funK: fun3int2int_t) -> float:
     """Compute the core chromarity
@@ -148,6 +154,7 @@ def Kcore(r: int, n: int, d: int, funK: fun3int2int_t) -> float:
     assert r > 0
     assert n >= d >= 0
     return d / n * (1 - funK(r, n, d) / r**n)
+
 
 # Generic Chromarity ------------------------------------------
 def K(P: set, c: dict, r: int, funK: fun3int2int_t = Gamma) -> float:
@@ -175,30 +182,30 @@ def K(P: set, c: dict, r: int, funK: fun3int2int_t = Gamma) -> float:
     except ZeroDivisionError:  # case if the structure is empty K(P)=0
         chromarity = 0
     return chromarity
-
 # ** GRAPH =============================================================================
 
 # Display  ----------------------------------------------------------
 
+
 # Default palette
 __chrocos_palette__ = {
-    0: "gainsboro",
-    1: "lightgreen",
-    2: "crimson",
-    3: "gold",
-    4: "steelblue",
-    5: "mediumpurple",
-    6: "darkorange",
-    7: "burlywood",
-    8: "salmon",
-    9: "orchid",
-    10:"darkorange",
-    9: "orchid",
-    10:"darkorange",
+    0:  "gainsboro",
+    1:  "lightgreen",
+    2:  "crimson",
+    3:  "gold",
+    4:  "steelblue",
+    5:  "mediumpurple",
+    6:  "darkorange",
+    7:  "burlywood",
+    8:  "salmon",
+    9:  "orchid",
+    10: "darkorange",
 }
+
 
 # Default font
 __font__ = "Franklin Gothic Heavy"  # other nice fonts  'Tahoma'  'Impact'
+
 
 def DrawColoredGraph(G, palette: dict[int, str] = __chrocos_palette__, pos=None):
     """Display a colored graph
@@ -220,6 +227,7 @@ def DrawColoredGraph(G, palette: dict[int, str] = __chrocos_palette__, pos=None)
         font_family=__font__,
     )
 
+
 # Display the community structure on graph
 def DrawChroCoS(G, P: set[frozenset], theme: str = "Set2", pos=None):
     """Display the chromarity structure on a graph. The nodes of the same community are the same color.
@@ -229,7 +237,7 @@ def DrawChroCoS(G, P: set[frozenset], theme: str = "Set2", pos=None):
         theme (str, optional): theme color of seaborn package. Defaults to 'Set2'.
         pos (dict|None, optional): position of nodes. Defaults to None.
     """
-    
+
     Pl = list(P)
     palette = sns.color_palette(theme, len(Pl))
     color = {v: palette[i] for i in range(len(Pl)) for v in Pl[i]}
@@ -243,8 +251,8 @@ def DrawChroCoS(G, P: set[frozenset], theme: str = "Set2", pos=None):
         font_color="black",
         font_family=__font__,
     )
-
 # Random Graph  --------------------------------------------------
+
 
 def RandomColoring(G: graph_t, seeds: list, density: float = 0.2, transparency: float = 0.0):
     """Attributes colors to nodes of graph G randomly.
@@ -267,11 +275,12 @@ def RandomColoring(G: graph_t, seeds: list, density: float = 0.2, transparency: 
             k=1,
         )[0]
 
-    nx.set_node_attributes( G, dict([(v, ChooseColorRandomly(seeds, v)) for v in G.nodes()]), "color")
+    nx.set_node_attributes(G, dict([(v, ChooseColorRandomly(seeds, v)) for v in G.nodes()]), "color")
 
     if transparency > 0:
         transparent = [v for v in G.nodes() if random() < transparency]
         nx.set_node_attributes(G, dict.fromkeys(transparent, 0), "color")
+
 
 def GenerateSeeds(G: graph_t, r: int) -> list:
     """Generate r color seeds for graph G by maximizing the  geometric mean distance between them.
@@ -301,7 +310,7 @@ def GenerateSeeds(G: graph_t, r: int) -> list:
     V = list(G.nodes())
     V.remove(vmax)
     V.remove(wmax)
-    for step in range(r - 2):
+    for _ in range(r - 2):
         maxi = 0
         vmax = None
         for v in V:
@@ -314,8 +323,8 @@ def GenerateSeeds(G: graph_t, r: int) -> list:
         seeds.append(vmax)
         V.remove(vmax)
     return seeds
-
 # ** CHROCODE ===========================================================================
+
 
 def MonochromeCommunityStructure(G: graph_t) -> set:
     """Compute a monochrome community structure of graph G.
@@ -337,12 +346,13 @@ def MonochromeCommunityStructure(G: graph_t) -> set:
             v = monochromeneighbors.pop()  # take a node for including its neighbors
             p.add(v)  # add the current node to the community
             for w in G[v]:  # extend the neighbor set with the same color
-                if G.nodes[w]["color"] == referencecolor and not w in p:
+                if G.nodes[w]["color"] == referencecolor and  w not in p:
                     monochromeneighbors.add(w)
 
         pendingnodes = pendingnodes - p  # remove the community of the examined vertices.
         P.add(frozenset(p))  # add the community to the structure
     return P
+
 
 def ChroCoDe(G: graph_t, r: int, radius: int = 2, funK: fun3int2int_t = Gamma) -> set:
     """Find a chromatic community structure.
@@ -377,7 +387,7 @@ def ChroCoDe(G: graph_t, r: int, radius: int = 2, funK: fun3int2int_t = Gamma) -
         N.remove(p)
 
         kmax = K(P, colorprofile, r, funK)
-        maxpath = set() 
+        maxpath = set()
         improved = False
         for q in N:  # find the neighbor q of p maximizing K by merging the path p-q.
             communitypath = set(nx.shortest_path(QG, p, q))
