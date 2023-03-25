@@ -4,6 +4,8 @@
 # OBJECT:   this script shows the basic use of the ChroCoDe algorithm on different graphs
 #           and draw the chromatic community structure solution on the graphs.
 #
+import networkx as nx
+import matplotlib.pyplot as plt
 
 from chrocos import (
     K,
@@ -16,8 +18,7 @@ from chrocos import (
     MonochromeCommunityStructure,
     ChroCoDe
 )
-import networkx as nx
-import matplotlib.pyplot as plt
+
 
 
 def printcommunities(P):
