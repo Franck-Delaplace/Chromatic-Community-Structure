@@ -90,9 +90,7 @@ def graphexample(G, position, title, transparency=0.0):
         + " - Kk="
         + "{:.2f}".format(K(P, cp, 4, funK=Kappa))
     )
-    DrawChroCoS(
-        G, P, theme="pastel", pos=position
-    )  # Display the community structure on the graph
+    DrawChroCoS(G, P, theme="pastel", pos=position)  # Display the community structure on the graph
 
     # Show
     plt.show()
