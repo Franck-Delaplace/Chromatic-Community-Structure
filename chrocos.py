@@ -65,7 +65,8 @@ def DominantSigs(r: int, n: int, d: int) -> list[list[int]]:
     assert n >= d >= 0
 
     # sub function of Dominant signatures
-    # depth=depth, rest=remaining value for which elements to sum must be found, dbound= max bound value, sig= signature)
+    # depth=depth, rest=remaining value for which elements to sum must be found,
+    # dbound= max bound value, sig= signature
     def DSS(depth: int, rest: int, dbound: int, sig: list):
         if rest == 0:
             ds = [depth * [0] + sig]
@@ -270,7 +271,8 @@ def RandomColoring(G: graph_t, seeds: list, density: float = 0.2, transparency: 
     assert 0.0 <= transparency <= 1.0
     assert nx.is_connected(G)  # require that a path exists for any pair of vertices.
 
-    # sub function selecting the color from seeds w.r.t. an exponential probability law. The farther from a color seed the node, the lower the probability of the color is.
+    # sub function selecting the color from seeds w.r.t. an exponential probability
+    # the farther from a color seed the node, the lower the probability of the color is.
     def ChooseColorRandomly(seeds: list, v) -> int:
         return choices(
             range(1, len(seeds) + 1),
