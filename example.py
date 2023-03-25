@@ -43,12 +43,8 @@ def graphexample(G, position, title, transparency=0.0):
         transparency (float, optional): probability of transparent nodes. Defaults to 0.0.
     """
 
-    seeds = GenerateSeeds(
-        G, r
-    )  # generate seeds - they represent the 'corners' of the grid graph.
-    RandomColoring(
-        G, seeds, density=0.3, transparency=transparency
-    )  # color the graph randomly.
+    seeds = GenerateSeeds(G, r)  # generate seeds - they represent the 'corners' of the grid graph.
+    RandomColoring(G, seeds, density=0.3, transparency=transparency)  # color the graph randomly.
     cp = nx.get_node_attributes(G, "color")  # get the color profile.
 
     P0 = MonochromeCommunityStructure(G)
@@ -57,7 +53,7 @@ def graphexample(G, position, title, transparency=0.0):
         title
         + " network: Monochrome community: Kk=%4.2f, Kg=%4.2f"
         % (K(P0, cp, 4, Kappa), K(P0, cp, 4, funK=Gamma))
-    )
+        )
     DrawColoredGraph(G, pos=position)  # Display the graph
 
     # RADIUS = 1
