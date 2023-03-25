@@ -247,7 +247,7 @@ def DrawChroCoS(G, P: set[frozenset], theme: str = "Set2", pos=None):
 
     Pl = list(P)
     palette = sns.color_palette(theme, len(Pl))
-    color = {v: palette[i] for i in range(len(Pl)) for v in Pl[i]}
+    color = {v: palette[i] for i in range(len(Pl)) for v in Pl[i]}  # type: ignore
     nx.draw_networkx(
         G,
         with_labels=True,
