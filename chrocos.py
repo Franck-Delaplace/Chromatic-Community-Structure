@@ -93,6 +93,7 @@ def DominantSigs(r: int, n: int, d: int) -> list[list[int]]:
 
     return domsigset
 
+
 # ** CHROMARITIES ===========================================================
 
 # Enumeration --------------------------------------------------
@@ -186,6 +187,8 @@ def K(P: set, c: dict, r: int, funK: fun3int2int_t = Gamma) -> float:
     except ZeroDivisionError:  # case if the structure is empty K(P)=0
         chromarity = 0
     return chromarity
+
+
 # ** GRAPH =============================================================================
 
 # Display  ----------------------------------------------------------
@@ -193,16 +196,16 @@ def K(P: set, c: dict, r: int, funK: fun3int2int_t = Gamma) -> float:
 
 # Default palette
 __chrocos_palette__ = {
-    0:  "gainsboro",
-    1:  "lightgreen",
-    2:  "crimson",
-    3:  "gold",
-    4:  "steelblue",
-    5:  "mediumpurple",
-    6:  "darkorange",
-    7:  "burlywood",
-    8:  "salmon",
-    9:  "orchid",
+    0: "gainsboro",
+    1: "lightgreen",
+    2: "crimson",
+    3: "gold",
+    4: "steelblue",
+    5: "mediumpurple",
+    6: "darkorange",
+    7: "burlywood",
+    8: "salmon",
+    9: "orchid",
     10: "darkorange",
 }
 
@@ -255,10 +258,14 @@ def DrawChroCoS(G, P: set[frozenset], theme: str = "Set2", pos=None):
         font_color="black",
         font_family=__font__,
     )
+
+
 # Random Graph  --------------------------------------------------
 
 
-def RandomColoring(G: graph_t, seeds: list, density: float = 0.2, transparency: float = 0.0):
+def RandomColoring(
+    G: graph_t, seeds: list, density: float = 0.2, transparency: float = 0.0
+):
     """Attributes colors to nodes of graph G randomly.
 
     Args:
@@ -276,11 +283,15 @@ def RandomColoring(G: graph_t, seeds: list, density: float = 0.2, transparency: 
     def ChooseColorRandomly(seeds: list, v) -> int:
         return choices(
             range(1, len(seeds) + 1),
-            weights=[exp(-density * nx.shortest_path_length(G, seed, v)) for seed in seeds],
+            weights=[
+                exp(-density * nx.shortest_path_length(G, seed, v)) for seed in seeds
+            ],
             k=1,
         )[0]
 
-    nx.set_node_attributes(G, dict([(v, ChooseColorRandomly(seeds, v)) for v in G.nodes()]), "color")
+    nx.set_node_attributes(
+        G, dict([(v, ChooseColorRandomly(seeds, v)) for v in G.nodes()]), "color"
+    )
 
     if transparency > 0:
         transparent = [v for v in G.nodes() if random() < transparency]
@@ -319,7 +330,9 @@ def GenerateSeeds(G: graph_t, r: int) -> list:
         maxi = 0
         vmax = None
         for v in V:
-            disttoseeds = [pathlength[v][seed] for seed in seeds if seed in pathlength[v]]
+            disttoseeds = [
+                pathlength[v][seed] for seed in seeds if seed in pathlength[v]
+            ]
             if disttoseeds:
                 meandisttoseeds = gmean(disttoseeds)
                 if meandisttoseeds > maxi:
@@ -328,6 +341,8 @@ def GenerateSeeds(G: graph_t, r: int) -> list:
         seeds.append(vmax)
         V.remove(vmax)
     return seeds
+
+
 # ** CHROCODE ===========================================================================
 
 
@@ -354,7 +369,9 @@ def MonochromeCommunityStructure(G: graph_t) -> set:
                 if G.nodes[w]["color"] == referencecolor and w not in p:
                     monochromeneighbors.add(w)
 
-        pendingnodes = pendingnodes - p  # remove the community of the examined vertices.
+        pendingnodes = (
+            pendingnodes - p
+        )  # remove the community of the examined vertices.
         P.add(frozenset(p))  # add the community to the structure
     return P
 
@@ -374,7 +391,9 @@ def ChroCoDe(G: graph_t, r: int, radius: int = 2, funK: fun3int2int_t = Gamma) -
     assert r > 0
 
     colorprofile = nx.get_node_attributes(G, "color")
-    QG = nx.quotient_graph(G, MonochromeCommunityStructure(G))  # Quotient graph of the monochrome community structure.
+    QG = nx.quotient_graph(
+        G, MonochromeCommunityStructure(G)
+    )  # Quotient graph of the monochrome community structure.
     P = set(QG.nodes())
     Pscan = P.copy()  # Initialize the running community structure Pscan.
 
@@ -388,7 +407,9 @@ def ChroCoDe(G: graph_t, r: int, radius: int = 2, funK: fun3int2int_t = Gamma) -
                 p = q
         Pscan.remove(p)  # remove p of the running community structure PScan.
 
-        N = list(nx.ego_graph(QG, p, radius=radius).nodes())  # compute the neighborhood of size radius but p.
+        N = list(
+            nx.ego_graph(QG, p, radius=radius).nodes()
+        )  # compute the neighborhood of size radius but p.
         N.remove(p)
 
         kmax = K(P, colorprofile, r, funK)
@@ -404,7 +425,9 @@ def ChroCoDe(G: graph_t, r: int, radius: int = 2, funK: fun3int2int_t = Gamma) -
                 kmax = k
                 maxpath = communitypath.copy()
 
-        if improved:  # Update P with the shortest path connecting p to this neighbor by merging their community.
+        if (
+            improved
+        ):  # Update P with the shortest path connecting p to this neighbor by merging their community.
             pmerge = reduce(lambda p, q: p | q, maxpath)
             P = (P - maxpath) | {pmerge}
             QG = nx.quotient_graph(G, P)  # Update the quotient graph QG
