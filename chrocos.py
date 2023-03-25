@@ -1,4 +1,17 @@
-""" Chromatic Community Structure (ChroCos) analysis module."""
+""" Chromatic Community Structure (ChroCos) analysis module.
+Functions:
+'ChroCoDe',
+'CommunityColorProfile',
+'DominantSigs',
+'DrawChroCoS',
+'DrawColoredGraph',
+'Gamma',
+'GenerateSeeds',
+'K',
+'Kappa',
+'Kcore',
+'MonochromeCommunityStructure',
+'RandomColoring'"""
 # ** CHROMATIC COMMUNITY STRUCTURE
 # AUTHOR : Franck Delaplace
 # CREATION DATE: 12/03/2023
