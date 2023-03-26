@@ -36,10 +36,10 @@ from typing import TypeAlias, Callable
 from random import choices, random
 from collections import Counter
 from functools import reduce
-from scipy.stats import gmean  # type: ignore
+from scipy.stats import gmean  
 
 import networkx as nx
-import seaborn as sns  # type: ignore
+import seaborn as sns  
 
 # graph type alias
 graph_t: TypeAlias = nx.classes.graph.Graph
