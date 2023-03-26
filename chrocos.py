@@ -226,7 +226,7 @@ __chrocos_palette__ = {
 
 
 # Default font
-__font__ = "Franklin Gothic Heavy"  # other nice fonts  'Tahoma'  'Impact'
+__Font__ = "Franklin Gothic Heavy"  # other nice fonts  'Tahoma'  'Impact'
 
 
 def DrawColoredGraph(G, palette: dict[int, str] = __chrocos_palette__, pos=None):
@@ -246,7 +246,7 @@ def DrawColoredGraph(G, palette: dict[int, str] = __chrocos_palette__, pos=None)
         node_size=500,
         font_size=11,
         font_color="black",
-        font_family=__font__,
+        font_family=__Font__,
     )
 
 
@@ -271,7 +271,7 @@ def DrawChroCoS(G, P: set[frozenset], theme: str = "Set2", pos=None):
         node_size=500,
         font_size=11,
         font_color="black",
-        font_family=__font__,
+        font_family=__Font__,
     )
 
 
