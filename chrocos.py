@@ -208,17 +208,17 @@ def K(P: set, c: dict, r: int, funK: fun3int2int_t = Gamma) -> float:
 
 
 # Default palette
-__chrocos_palette__ = {
-    0:  "gainsboro",
-    1:  "lightgreen",
-    2:  "crimson",
-    3:  "gold",
-    4:  "steelblue",
-    5:  "mediumpurple",
-    6:  "darkorange",
-    7:  "burlywood",
-    8:  "salmon",
-    9:  "orchid",
+__ChrocosPalette__ = {
+    0: "gainsboro",
+    1: "lightgreen",
+    2: "crimson",
+    3: "gold",
+    4: "steelblue",
+    5: "mediumpurple",
+    6: "darkorange",
+    7: "burlywood",
+    8: "salmon",
+    9: "orchid",
     10: "darkorange",
 }
 
@@ -227,7 +227,7 @@ __chrocos_palette__ = {
 __font__ = "Franklin Gothic Heavy"  # other nice fonts  'Tahoma'  'Impact'
 
 
-def DrawColoredGraph(G, palette: dict[int, str] = __chrocos_palette__, pos=None):
+def DrawColoredGraph(G, palette: dict[int, str] = __ChrocosPalette__, pos=None):
     """Display a colored graph
 
     Args:
@@ -271,7 +271,6 @@ def DrawChroCoS(G, P: set[frozenset], theme: str = "Set2", pos=None):
         font_color="black",
         font_family=__font__,
     )
-
 
 # Random Graph  --------------------------------------------------
 
