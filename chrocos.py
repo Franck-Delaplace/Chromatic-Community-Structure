@@ -12,6 +12,8 @@ Module content:
     'Kcore',
     'MonochromeCommunityStructure',
     'RandomColoring'"""
+
+
 # ** CHROMATIC COMMUNITY STRUCTURE
 # AUTHOR : Franck Delaplace
 # CREATION DATE: 12/03/2023
@@ -28,7 +30,7 @@ Module content:
 #   - d is the number of nodes with the same color. 0<=d<=n
 # The colors are integers from 1 to r and 0 stands for the transparent color
 
-# ** Import functions & packages, typing ====================================
+# ** Import functions & packages, typing ================================================================================
 from math import factorial, comb, ceil, exp, inf
 from typing import TypeAlias, Callable
 from random import choices, random
@@ -45,7 +47,7 @@ graph_t: TypeAlias = nx.classes.graph.Graph
 # enumeration function type
 fun3int2int_t: TypeAlias = Callable[[int, int, int], int]
 
-# ** BASIC FUNCTIONS =====================================================
+# ** BASIC FUNCTIONS ====================================================================================================
 
 
 def CommunityColorProfile(p: frozenset, c: dict, basic=True) -> dict:
@@ -107,9 +109,8 @@ def DominantSigs(r: int, n: int, d: int) -> list[list[int]]:
     return domsigset
 
 
-# ** CHROMARITIES ===========================================================
-
-# Enumeration --------------------------------------------------
+# ** CHROMARITIES ==================================================================================================
+# Enumeration function -----------------------------------------------
 
 
 def Kappa(r: int, n: int, d: int) -> int:
@@ -202,7 +203,7 @@ def K(P: set, c: dict, r: int, funK: fun3int2int_t = Gamma) -> float:
     return chromarity
 
 
-# ** GRAPH =============================================================================
+# ** GRAPH =======================================================================================================
 
 # Display  ----------------------------------------------------------
 
@@ -355,7 +356,7 @@ def GenerateSeeds(G: graph_t, r: int) -> list:
     return seeds
 
 
-# ** CHROCODE ===========================================================================
+# ** CHROCODE ====================================================================================================
 
 
 def MonochromeCommunityStructure(G: graph_t) -> set:
@@ -403,9 +404,7 @@ def ChroCoDe(G: graph_t, r: int, radius: int = 2, funK: fun3int2int_t = Gamma) -
     assert r > 0
 
     colorprofile = nx.get_node_attributes(G, "color")
-    QG = nx.quotient_graph(
-        G, MonochromeCommunityStructure(G)
-    )  # Quotient graph of the monochrome community structure.
+    QG = nx.quotient_graph(G, MonochromeCommunityStructure(G))  # Quotient graph of the monochrome community structure.
     P = set(QG.nodes())
     Pscan = P.copy()  # Initialize the running community structure Pscan.
 
