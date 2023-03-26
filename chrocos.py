@@ -30,7 +30,7 @@ Module content:
 #   - d is the number of nodes with the same color. 0<=d<=n
 # The colors are integers from 1 to r and 0 stands for the transparent color
 
-# ** Import functions & packages, typing ================================================================================
+# ** Import functions & packages, typing ====================================
 from math import factorial, comb, ceil, exp, inf
 from typing import TypeAlias, Callable
 from random import choices, random
@@ -47,7 +47,7 @@ graph_t: TypeAlias = nx.classes.graph.Graph
 # enumeration function type
 fun3int2int_t: TypeAlias = Callable[[int, int, int], int]
 
-# ** BASIC FUNCTIONS ====================================================================================================
+# ** BASIC FUNCTIONS =====================================================
 
 
 def CommunityColorProfile(p: frozenset, c: dict, basic=True) -> dict:
@@ -99,7 +99,7 @@ def DominantSigs(r: int, n: int, d: int) -> list[list[int]]:
         return ds
 
     # main
-    domsigset = []  # type:list[list[int]]
+    domsigset = []   # type:list[list[int]]
     if r == 0:
         if n == 0:
             domsigset = [[]]
@@ -109,8 +109,9 @@ def DominantSigs(r: int, n: int, d: int) -> list[list[int]]:
     return domsigset
 
 
-# ** CHROMARITIES ==================================================================================================
-# Enumeration function -----------------------------------------------
+# ** CHROMARITIES ===========================================================
+
+# Enumeration --------------------------------------------------
 
 
 def Kappa(r: int, n: int, d: int) -> int:
@@ -203,23 +204,23 @@ def K(P: set, c: dict, r: int, funK: fun3int2int_t = Gamma) -> float:
     return chromarity
 
 
-# ** GRAPH =======================================================================================================
+# ** GRAPH =============================================================================
 
 # Display  ----------------------------------------------------------
 
 
 # Default palette
-__ChrocosPalette__ = {
-    0: "gainsboro",
-    1: "lightgreen",
-    2: "crimson",
-    3: "gold",
-    4: "steelblue",
-    5: "mediumpurple",
-    6: "darkorange",
-    7: "burlywood",
-    8: "salmon",
-    9: "orchid",
+__chrocos_palette__ = {
+    0:  "gainsboro",
+    1:  "lightgreen",
+    2:  "crimson",
+    3:  "gold",
+    4:  "steelblue",
+    5:  "mediumpurple",
+    6:  "darkorange",
+    7:  "burlywood",
+    8:  "salmon",
+    9:  "orchid",
     10: "darkorange",
 }
 
@@ -228,12 +229,12 @@ __ChrocosPalette__ = {
 __font__ = "Franklin Gothic Heavy"  # other nice fonts  'Tahoma'  'Impact'
 
 
-def DrawColoredGraph(G, palette: dict[int, str] = __ChrocosPalette__, pos=None):
+def DrawColoredGraph(G, palette: dict[int, str] = __chrocos_palette__, pos=None):
     """Display a colored graph
 
     Args:
         G (Graph): colored graph
-        palette (dict[int,str], optional): color palette associating a color to integer. Defaults to  __ChrocosPalette__ (up to 10 colors).
+        palette (dict[int,str], optional): color palette associating a color to integer. Defaults to __chrocos_palette__ (up to 10 colors).
         pos (dict|None, optional): node position. Defaults to None.
     """
     color = nx.get_node_attributes(G, "color")
@@ -272,6 +273,7 @@ def DrawChroCoS(G, P: set[frozenset], theme: str = "Set2", pos=None):
         font_color="black",
         font_family=__font__,
     )
+
 
 # Random Graph  --------------------------------------------------
 
@@ -356,7 +358,7 @@ def GenerateSeeds(G: graph_t, r: int) -> list:
     return seeds
 
 
-# ** CHROCODE ====================================================================================================
+# ** CHROCODE ===========================================================================
 
 
 def MonochromeCommunityStructure(G: graph_t) -> set:
@@ -404,7 +406,9 @@ def ChroCoDe(G: graph_t, r: int, radius: int = 2, funK: fun3int2int_t = Gamma) -
     assert r > 0
 
     colorprofile = nx.get_node_attributes(G, "color")
-    QG = nx.quotient_graph(G, MonochromeCommunityStructure(G))  # Quotient graph of the monochrome community structure.
+    QG = nx.quotient_graph(
+        G, MonochromeCommunityStructure(G)
+    )  # Quotient graph of the monochrome community structure.
     P = set(QG.nodes())
     Pscan = P.copy()  # Initialize the running community structure Pscan.
 
