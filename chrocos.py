@@ -271,8 +271,7 @@ def DrawChroCoS(G, P: set[frozenset], theme: str = "Set2", pos=None):
         node_size=500,
         font_size=11,
         font_color="black",
-        font_family=__Font__,
-    )
+        font_family=__Font__)
 
 
 # Random Graph  --------------------------------------------------
