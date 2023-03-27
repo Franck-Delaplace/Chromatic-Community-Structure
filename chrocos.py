@@ -421,7 +421,7 @@ def ChroCoDe(G: graph_t, r: int, radius: int = 2, funK: fun3int2int_t = Gamma) -
                 p = q
         Pscan.remove(p)  # remove p of the running community structure PScan.
 
-        N = list( nx.ego_graph(QG, p, radius=radius).nodes())  # compute the neighborhood of size radius but p.
+        N = list(nx.ego_graph(QG, p, radius=radius).nodes())  # compute the neighborhood of size radius but p.
         N.remove(p)
 
         kmax = K(P, colorprofile, r, funK)
