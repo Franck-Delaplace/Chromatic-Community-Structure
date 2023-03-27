@@ -221,7 +221,7 @@ __chrocos_palette__ = {
     7:  "burlywood",
     8:  "salmon",
     9:  "orchid",
-    10: "darkorange",
+    10: "teal",
 }
 
 
