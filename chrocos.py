@@ -210,7 +210,7 @@ def K(P: set, c: dict, r: int, funK: fun3int2int_t = Gamma) -> float:
 
 
 # Default palette
-__chrocos_palette__ = {
+__ChroCoSPalette__ = {
     0:  "gainsboro",
     1:  "lightgreen",
     2:  "crimson",
@@ -229,7 +229,7 @@ __chrocos_palette__ = {
 __Font__ = "Franklin Gothic Heavy"  # other nice fonts  'Tahoma'  'Impact'
 
 
-def DrawColoredGraph(G, palette: dict[int, str] = __chrocos_palette__, pos=None):
+def DrawColoredGraph(G, palette: dict[int, str] = __ChroCoSPalette__, pos=None):
     """Display a colored graph
 
     Args:
@@ -277,9 +277,7 @@ def DrawChroCoS(G, P: set[frozenset], theme: str = "Set2", pos=None):
 # Random Graph  --------------------------------------------------
 
 
-def RandomColoring(
-    G: graph_t, seeds: list, density: float = 0.2, transparency: float = 0.0
-):
+def RandomColoring(G: graph_t, seeds: list, density: float = 0.2, transparency: float = 0.0):
     """Attributes colors to nodes of graph G randomly.
 
     Args:
@@ -303,9 +301,7 @@ def RandomColoring(
             k=1,
         )[0]
 
-    nx.set_node_attributes(
-        G, dict([(v, ChooseColorRandomly(seeds, v)) for v in G.nodes()]), "color"
-    )
+    nx.set_node_attributes(G, dict([(v, ChooseColorRandomly(seeds, v)) for v in G.nodes()]), "color")
 
     if transparency > 0:
         transparent = [v for v in G.nodes() if random() < transparency]
@@ -344,9 +340,8 @@ def GenerateSeeds(G: graph_t, r: int) -> list:
         maxi = 0
         vmax = None
         for v in V:
-            disttoseeds = [
-                pathlength[v][seed] for seed in seeds if seed in pathlength[v]
-            ]
+            disttoseeds = [pathlength[v][seed] for seed in seeds if seed in pathlength[v]]
+
             if disttoseeds:
                 meandisttoseeds = gmean(disttoseeds)
                 if meandisttoseeds > maxi:
