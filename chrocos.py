@@ -148,12 +148,8 @@ def Gamma(r: int, n: int, d: int) -> int:
     factorialnr = factorial(n) * factorial(r)
 
     for sig in DominantSigs(r, n, d):
-        ps = 1
-        for s in sig:
-            ps *= factorial(s)
-        pcs = 1
-        for cs in Counter(sig).values():
-            pcs *= factorial(cs)
+        ps = reduce(lambda x,y: x*y,map(factorial,sig))
+        pcs = reduce(lambda x,y: x*y,map(factorial,Counter(sig).values()))
         gamma += factorialnr // (ps * pcs)
     return gamma
 
@@ -376,7 +372,7 @@ def MonochromeCommunityStructure(G: graph_t) -> set:
             p.add(v)  # add the current node to the community
             for w in G[v]:  # extend the neighbor set with the same color
                 if G.nodes[w]["color"] == referencecolor and w not in p:
-                    monochromeneighbors.add(w) 
+                    monochromeneighbors.add(w)
 
         pendingnodes = (
             pendingnodes - p
