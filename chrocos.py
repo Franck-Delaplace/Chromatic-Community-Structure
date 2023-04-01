@@ -234,7 +234,7 @@ def DrawColoredGraph(G, palette: dict[int, str] = __CHROCOS_PALETTE__, pos=None)
 
     Args:
         G (Graph): colored graph
-        palette (dict[int,str], optional): color palette associating a color to integer. Defaults to __chrocos_palette__ (up to 10 colors).
+        palette (dict[int,str], optional): color palette associating a color to integer. Defaults to __CHROCOS_PALETTE__ (up to 10 colors).
         pos (dict|None, optional): node position. Defaults to None.
     """
     color = nx.get_node_attributes(G, "color")
