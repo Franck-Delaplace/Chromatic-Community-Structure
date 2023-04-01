@@ -148,8 +148,8 @@ def Gamma(r: int, n: int, d: int) -> int:
     factorialnr = factorial(n) * factorial(r)
 
     for sig in DominantSigs(r, n, d):
-        ps = reduce(lambda x,y: x*y,map(factorial,sig))
-        pcs = reduce(lambda x,y: x*y,map(factorial,Counter(sig).values()))
+        ps = reduce(lambda x,y: x*y,map(factorial,sig),1)
+        pcs = reduce(lambda x,y: x*y,map(factorial,Counter(sig).values()),1)
         gamma += factorialnr // (ps * pcs)
     return gamma
 
