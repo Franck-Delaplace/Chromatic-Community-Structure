@@ -210,7 +210,7 @@ def K(P: set, c: dict, r: int, funK: fun3int2int_t = Gamma) -> float:
 
 
 # Default palette
-__ChroCoSPalette__ = {
+__CHROCOS_PALETTE__ = {
     0:  "gainsboro",
     1:  "lightgreen",
     2:  "crimson",
@@ -226,10 +226,10 @@ __ChroCoSPalette__ = {
 
 
 # Default font
-__Font__ = "Franklin Gothic Heavy"  # other nice fonts  'Tahoma'  'Impact'
+__FONT__ = "Franklin Gothic Heavy"  # other nice fonts  'Tahoma'  'Impact'
 
 
-def DrawColoredGraph(G, palette: dict[int, str] = __ChroCoSPalette__, pos=None):
+def DrawColoredGraph(G, palette: dict[int, str] = __CHROCOS_PALETTE__, pos=None):
     """Display a colored graph
 
     Args:
@@ -246,7 +246,7 @@ def DrawColoredGraph(G, palette: dict[int, str] = __ChroCoSPalette__, pos=None):
         node_size=500,
         font_size=11,
         font_color="black",
-        font_family=__Font__,
+        font_family=__FONT__,
     )
 
 
@@ -271,7 +271,7 @@ def DrawChroCoS(G, P: set[frozenset], theme: str = "Set2", pos=None):
         node_size=500,
         font_size=11,
         font_color="black",
-        font_family=__Font__)
+        font_family=__FONT__)
 
 
 # Random Graph  --------------------------------------------------
@@ -376,7 +376,7 @@ def MonochromeCommunityStructure(G: graph_t) -> set:
             p.add(v)  # add the current node to the community
             for w in G[v]:  # extend the neighbor set with the same color
                 if G.nodes[w]["color"] == referencecolor and w not in p:
-                    monochromeneighbors.add(w)
+                    monochromeneighbors.add(w) 
 
         pendingnodes = (
             pendingnodes - p
