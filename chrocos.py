@@ -291,9 +291,7 @@ def RandomColoring(G: graph_t, seeds: list, density: float = 0.2, transparency: 
     def ChooseColorRandomly(seeds: list, v) -> int:
         return choices(
             range(1, len(seeds) + 1),
-            weights=[
-                exp(-density * nx.shortest_path_length(G, seed, v)) for seed in seeds
-            ],
+            weights=[exp(-density * nx.shortest_path_length(G, seed, v)) for seed in seeds],
             k=1,
         )[0]
 
@@ -386,7 +384,7 @@ def ChroCoDe(G: graph_t, r: int, radius: int = 2, funK: fun3int2int_t = Gamma) -
     Args:
         G (Graph): Colored undirected graph
         r (int): number of colors
-        # radius (int, optional): neighborhood distance. Defaults to 2.
+        radius (int, optional): neighborhood distance. Defaults to 2.
         funK (function(int,int,int)->int, optional): enumeration function counting the color profile communities. Defaults to Gamma.
 
     Returns:
