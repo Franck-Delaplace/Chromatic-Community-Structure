@@ -7,12 +7,11 @@ Module content:
     'DrawColoredGraph',
     'Gamma',
     'GenerateSeeds',
-    'K',
+    'H',
+    'Hcore',
     'Kappa',
-    'Kcore',
     'MonochromeCommunityStructure',
     'RandomColoring'"""
-
 
 # ** CHROMATIC COMMUNITY STRUCTURE
 # AUTHOR : Franck Delaplace
@@ -31,7 +30,7 @@ Module content:
 # The colors are integers from 1 to r and 0 stands for the transparent color
 
 # ** Import functions & packages, typing ====================================
-from math import factorial, comb, ceil, exp, inf
+from math import factorial, comb, ceil, exp, inf, log2
 from typing import TypeAlias, Callable
 from random import choices, random
 from collections import Counter
@@ -154,26 +153,33 @@ def Gamma(r: int, n: int, d: int) -> int:
     return gamma
 
 
-# Generic Core chromarities -------------------------------------
-def Kcore(r: int, n: int, d: int, funK: fun3int2int_t) -> float:
+#  Chromatic entropy -------------------------------------
+
+def Hcore(r: int, n: int, d: int, funenum: fun3int2int_t) -> float:
     """Compute the core chromarity
 
     Args:
         r (int): number of colors,
         n (int): size of a community,
         d (int): number of nodes with the same color,
-        funK (function): enumeration function.
+        funenum (function): enumeration function.
 
     Returns:
         float: chromarity value.
     """
     assert r > 0
     assert n >= d >= 0
-    return d / n * (1 - funK(r, n, d) / r**n)
+    p = funenum(r, n, d) / r**n
+
+    try:
+        h = -p*log2(1 - p)
+    except ValueError:  # case if a community is empty  skip it
+        h = inf
+
+    return h
 
 
-# Generic Chromarity ------------------------------------------
-def K(P: set, c: dict, r: int, funK: fun3int2int_t = Gamma) -> float:
+def H(P: set, c: dict, r: int, funenum: fun3int2int_t = Gamma) -> float:
     """compute the chromarity
 
     Args:
@@ -183,21 +189,18 @@ def K(P: set, c: dict, r: int, funK: fun3int2int_t = Gamma) -> float:
         funK (fun3int2int_t, optional): enumeration function. Defaults to Gamma.
 
     Returns:
-        float: chromarity value.
+        float: chromatic entropy.
     """
 
-    k = 0.0
+    h = 0.0
     for p in P:
         colors = CommunityColorProfile(p, c, basic=False).values()
         try:
-            k += Kcore(r, len(p), max(Counter(colors).values()), funK)
-        except ValueError:  # case if a community is empty  K(p)=0
+            h += Hcore(r, len(p), max(Counter(colors).values()), funenum)
+        except ValueError:  # case if a community is empty  skip it
             pass
-    try:
-        chromarity = k / len(P)
-    except ZeroDivisionError:  # case if the structure is empty K(P)=0
-        chromarity = 0
-    return chromarity
+
+    return h
 
 
 # ** GRAPH =============================================================================
@@ -379,18 +382,18 @@ def MonochromeCommunityStructure(G: graph_t) -> set:
     return P
 
 
-def ChroCoDe(G: graph_t, r: int, radius: int = 2, funK: fun3int2int_t = Gamma) -> set:
+def ChroCoDe(G: graph_t, r: int, radius: int = 1, funenum: fun3int2int_t = Gamma) -> set:
     """Find a chromatic community structure.
     Args:
         G (Graph): Colored undirected graph
         r (int): number of colors
-        radius (int, optional): neighborhood distance. Defaults to 2.
-        funK (function(int,int,int)->int, optional): enumeration function counting the color profile communities. Defaults to Gamma.
+        radius (int, optional): neighborhood distance. Defaults to 1.
+        funenum (function(int,int,int)->int, optional): enumeration function counting the color profile communities. Defaults to Gamma.
 
     Returns:
         set[frozenset[node]] : community structure.
     """
-    assert radius >= 1
+    assert radius > 0
     assert r > 0
 
     colorprofile = nx.get_node_attributes(G, "color")
@@ -401,34 +404,34 @@ def ChroCoDe(G: graph_t, r: int, radius: int = 2, funK: fun3int2int_t = Gamma) -
     Pscan = P.copy()  # Initialize the running community structure Pscan.
 
     while Pscan:  # When no improvements of P occur then Pscan will empty progressively.
-        kmin = inf
+        hmax = 0.0
         p = set()
-        for q in Pscan:  # find the community p in P with the minimal core chromarity.
-            k = K({q}, colorprofile, r, funK)
-            if k < kmin:
-                kmin = k
+        for q in Pscan:  # find the community p in P with the maximal chromatic entropy.
+            h = H({q}, colorprofile, r, funenum)
+            if h > hmax:
+                hmax = h
                 p = q
         Pscan.remove(p)  # remove p of the running community structure PScan.
 
         N = list(nx.ego_graph(QG, p, radius=radius).nodes())  # compute the neighborhood of size radius but p.
         N.remove(p)
 
-        kmax = K(P, colorprofile, r, funK)
-        maxpath = set()
+        hmin = H(P, colorprofile, r, funenum)
+        minpath = set()
         improved = False
         for q in N:  # find the neighbor q of p maximizing K by merging the path p-q.
             communitypath = set(nx.shortest_path(QG, p, q))
             pmerge = reduce(lambda p, q: p | q, communitypath)
 
-            k = K((P - communitypath) | {pmerge}, colorprofile, r, funK)
-            if kmax < k:
+            h = H((P - communitypath) | {pmerge}, colorprofile, r, funenum)
+            if hmin >= h:
                 improved = True
-                kmax = k
-                maxpath = communitypath.copy()
+                hmin = h
+                minpath = communitypath.copy()
 
         if (improved):  # Update P with the shortest path connecting p to this neighbor by merging their community.
-            pmerge = reduce(lambda p, q: p | q, maxpath)
-            P = (P - maxpath) | {pmerge}
-            QG = nx.quotient_graph(G, P)  # Update the quotient graph QG
+            pmerge = reduce(lambda p, q: p | q, minpath)
+            P = (P - minpath) | {pmerge}
+            QG = nx.quotient_graph(G, P)  # re-compute the quotient graph QG
             Pscan = P.copy()  # re-initialize Pscan
     return P
