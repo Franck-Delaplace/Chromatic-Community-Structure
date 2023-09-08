@@ -52,7 +52,7 @@ def graphexample(G, position, title, transparency=0.0):
     plt.title(
         title
         + " network: Monochrome community: Hk=%4.2f, Hg=%4.2f"
-        % (H(P0, cp, 4, Kappa), H(P0, cp, 4, funenum=Gamma))
+        % (H(P0, cp, 4, Kappa), H(P0, cp, 4, Gamma))
         )
     DrawColoredGraph(G, pos=position)  # Display the graph
 
