@@ -19,6 +19,7 @@ from chrocos import (
     ChroCoDe
 )
 
+
 def printcommunities(P):
     """print the community structure
 
