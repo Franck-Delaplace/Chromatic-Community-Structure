@@ -19,7 +19,6 @@ from chrocos import (
     ChroCoDe
 )
 
-
 def printcommunities(P):
     """print the community structure
 
@@ -67,10 +66,10 @@ def graphexample(G, position, title, transparency=0.0):
     # Display the result
     plt.subplot(223)
     plt.title(
-        "radius=1 - Kg="
-        + "{:.2f}".format(H(P, cp, 4, Gamma))
+        "radius=1 - Hg="
+        + "{:.3e}".format(H(P, cp, 4, Gamma))
         + " - Hk="
-        + "{:.2f}".format(H(P, cp, 4, funenum=Kappa))
+        + "{:.3e}".format(H(P, cp, 4, funenum=Kappa))
     )
     DrawChroCoS(G, P, pos=position)  # Display the community structure on the graph
 
@@ -86,9 +85,9 @@ def graphexample(G, position, title, transparency=0.0):
     plt.subplot(224)
     plt.title(
         "radius=2 - Hg="
-        + "{:.2f}".format(H(P, cp, 4, funemum=Gamma))
+        + "{:.3e}".format(H(P, cp, 4, Gamma))
         + " - Hk="
-        + "{:.2f}".format(H(P, cp, 4, funenum=Kappa))
+        + "{:.3e}".format(H(P, cp, 4, funenum=Kappa))
     )
     DrawChroCoS(G, P, theme="pastel", pos=position)  # Display the community structure on the graph
 

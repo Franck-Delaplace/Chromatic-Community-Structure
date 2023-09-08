@@ -197,7 +197,7 @@ def H(P: set, c: dict, r: int, funenum: fun3int2int_t = Gamma) -> float:
         colors = CommunityColorProfile(p, c, basic=False).values()
         try:
             h += Hcore(r, len(p), max(Counter(colors).values()), funenum)
-        except ValueError:  # case if a community is empty  skip it
+        except ValueError:  # case if a community is empty or only with transparent nodes - skip it (provisionally )
             pass
 
     return h
