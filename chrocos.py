@@ -404,11 +404,11 @@ def ChroCoDe(G: graph_t, r: int, radius: int = 1, funenum: fun3int2int_t = Gamma
     Pscan = P.copy()  # Initialize the running community structure Pscan.
 
     while Pscan:  # When no improvements of P occur then Pscan will empty progressively.
-        hmax = 0.0
+        hmax = -1.0
         p = set()
         for q in Pscan:  # find the community p in P with the maximal chromatic entropy.
             h = H({q}, colorprofile, r, funenum)
-            if h >= hmax:
+            if h > hmax:
                 hmax = h
                 p = q
         Pscan.remove(p)  # remove p of the running community structure PScan.
