@@ -419,12 +419,12 @@ def ChroCoDe(G: graph_t, r: int, radius: int = 1, funenum: fun3int2int_t = Gamma
         hmin = H(P, colorprofile, r, funenum)
         minpath = set()
         improved = False
-        for q in N:  # find the neighbor q of p maximizing K by merging the path p-q.
+        for q in N:  # find the neighbor q of p minimizing H by merging the path p-q.
             communitypath = set(nx.shortest_path(QG, p, q))
-            pmerge = reduce(lambda p, q: p | q, communitypath)
+            pmerge = reduce(lambda p, q: p | q, communitypath) # Union of communities of the path.
 
-            h = H((P - communitypath) | {pmerge}, colorprofile, r, funenum)
-            if hmin >= h:
+            h = H((P - communitypath) | {pmerge}, colorprofile, r, funenum) # add pmerge to P
+            if hmin >= h: # !>= matters for the correctness.
                 improved = True
                 hmin = h
                 minpath = communitypath.copy()
