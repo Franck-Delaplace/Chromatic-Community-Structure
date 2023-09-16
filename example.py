@@ -139,12 +139,3 @@ G = SFG.to_undirected()
 
 position = nx.spring_layout(G)
 graphexample(G, position, "Scale Free")
-# GRID with Transparent color ===============================================
-print("GRID GRAPH WITH TRANSPARENCY")
-plt.figure(figsize=(10, 10))  # set size of the output graphic view
-n = 8
-GD = nx.grid_2d_graph(n, n)
-G = nx.convert_node_labels_to_integers(GD)  # rename the vertices as integers
-
-gridposition = dict(zip(G, GD))  # define position as label of the initial graph
-graphexample(G, gridposition, "Grid with transparent nodes in the", transparency=0.2)
