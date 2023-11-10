@@ -98,7 +98,7 @@ def DominantSigs(r: int, n: int, d: int) -> list[list[int]]:
         return ds
 
     # main
-    domsigset = []   # type:list[list[int]]
+    domsigset = []  # type:list[list[int]]
     if r == 0:
         if n == 0:
             domsigset = [[]]
@@ -147,13 +147,14 @@ def Gamma(r: int, n: int, d: int) -> int:
     factorialnr = factorial(n) * factorial(r)
 
     for sig in DominantSigs(r, n, d):
-        ps = reduce(lambda x, y: x*y, map(factorial, sig), 1)
-        pcs = reduce(lambda x, y: x*y, map(factorial, Counter(sig).values()), 1)
+        ps = reduce(lambda x, y: x * y, map(factorial, sig), 1)
+        pcs = reduce(lambda x, y: x * y, map(factorial, Counter(sig).values()), 1)
         gamma += factorialnr // (ps * pcs)
     return gamma
 
 
 #  Chromatic entropy -------------------------------------
+
 
 def Hcore(r: int, n: int, d: int, funenum: fun3int2int_t) -> float:
     """Compute the core chromarity
@@ -172,7 +173,7 @@ def Hcore(r: int, n: int, d: int, funenum: fun3int2int_t) -> float:
     p = funenum(r, n, d) / r**n
 
     try:
-        h = -p*log2(1 - p)
+        h = -p * log2(1 - p)
     except ValueError:  # case if a community is empty  skip it
         h = inf
 
@@ -197,7 +198,9 @@ def H(P: set, c: dict, r: int, funenum: fun3int2int_t = Gamma) -> float:
         colors = CommunityColorProfile(p, c, basic=False).values()
         try:
             h += Hcore(r, len(p), max(Counter(colors).values()), funenum)
-        except ValueError:  # case if a community is empty or only with transparent nodes - skip it (provisionally )
+        except (
+            ValueError
+        ):  # case if a community is empty or only with transparent nodes - skip it (provisionally )
             pass
 
     return h
@@ -210,16 +213,16 @@ def H(P: set, c: dict, r: int, funenum: fun3int2int_t = Gamma) -> float:
 
 # Default palette
 __CHROCOS_PALETTE__ = {
-    0:  "gainsboro",
-    1:  "lightgreen",
-    2:  "crimson",
-    3:  "gold",
-    4:  "steelblue",
-    5:  "mediumpurple",
-    6:  "darkorange",
-    7:  "burlywood",
-    8:  "salmon",
-    9:  "orchid",
+    0: "gainsboro",
+    1: "lightgreen",
+    2: "crimson",
+    3: "gold",
+    4: "steelblue",
+    5: "mediumpurple",
+    6: "darkorange",
+    7: "burlywood",
+    8: "salmon",
+    9: "orchid",
     10: "teal",
 }
 
@@ -270,13 +273,16 @@ def DrawChroCoS(G, P: set[frozenset], theme: str = "Set2", pos=None):
         node_size=500,
         font_size=11,
         font_color="black",
-        font_family=__FONT__)
+        font_family=__FONT__,
+    )
 
 
 # Random Graph  --------------------------------------------------
 
 
-def RandomColoring(G: graph_t, seeds: list, density: float = 0.2, transparency: float = 0.0):
+def RandomColoring(
+    G: graph_t, seeds: list, density: float = 0.2, transparency: float = 0.0
+):
     """Attributes colors to nodes of graph G randomly.
 
     Args:
@@ -294,11 +300,15 @@ def RandomColoring(G: graph_t, seeds: list, density: float = 0.2, transparency: 
     def ChooseColorRandomly(seeds: list, v) -> int:
         return choices(
             range(1, len(seeds) + 1),
-            weights=[exp(-density * nx.shortest_path_length(G, seed, v)) for seed in seeds],
+            weights=[
+                exp(-density * nx.shortest_path_length(G, seed, v)) for seed in seeds
+            ],
             k=1,
         )[0]
 
-    nx.set_node_attributes(G, dict([(v, ChooseColorRandomly(seeds, v)) for v in G.nodes()]), "color")
+    nx.set_node_attributes(
+        G, dict([(v, ChooseColorRandomly(seeds, v)) for v in G.nodes()]), "color"
+    )
 
     if transparency > 0:
         transparent = [v for v in G.nodes() if random() < transparency]
@@ -337,7 +347,9 @@ def GenerateSeeds(G: graph_t, r: int) -> list:
         maxi = 0
         vmax = None
         for v in V:
-            disttoseeds = [pathlength[v][seed] for seed in seeds if seed in pathlength[v]]
+            disttoseeds = [
+                pathlength[v][seed] for seed in seeds if seed in pathlength[v]
+            ]
 
             if disttoseeds:
                 meandisttoseeds = gmean(disttoseeds)
@@ -382,7 +394,9 @@ def MonochromeCommunityStructure(G: graph_t) -> set:
     return P
 
 
-def ChroCoDe(G: graph_t, r: int, radius: int = 1, funenum: fun3int2int_t = Gamma) -> set:
+def ChroCoDe(
+    G: graph_t, r: int, radius: int = 1, funenum: fun3int2int_t = Gamma
+) -> set:
     """Find a chromatic community structure.
     Args:
         G (Graph): Colored undirected graph
@@ -413,7 +427,9 @@ def ChroCoDe(G: graph_t, r: int, radius: int = 1, funenum: fun3int2int_t = Gamma
                 p = q
         Pscan.remove(p)  # remove p of the running community structure PScan.
 
-        N = list(nx.ego_graph(QG, p, radius=radius).nodes())  # compute the neighborhood of size radius but p.
+        N = list(
+            nx.ego_graph(QG, p, radius=radius).nodes()
+        )  # compute the neighborhood of size radius but p.
         N.remove(p)
 
         hmin = H(P, colorprofile, r, funenum)
@@ -421,15 +437,17 @@ def ChroCoDe(G: graph_t, r: int, radius: int = 1, funenum: fun3int2int_t = Gamma
         improved = False
         for q in N:  # find the neighbor q of p minimizing H by merging the path p-q.
             communitypath = set(nx.shortest_path(QG, p, q))
-            pmerge = reduce(lambda p, q: p | q, communitypath) # Union of communities of the path.
+            pmerge = reduce(lambda p, q: p | q, communitypath)  # Union of communities of the path.
 
-            h = H((P - communitypath) | {pmerge}, colorprofile, r, funenum) # add pmerge to P
-            if hmin >= h: # !>= matters for the correctness.
+            h = H((P - communitypath) | {pmerge}, colorprofile, r, funenum)  # add pmerge to P
+            if hmin >= h:  # !>= matters for the correctness.
                 improved = True
                 hmin = h
                 minpath = communitypath.copy()
 
-        if (improved):  # Update P with the shortest path connecting p to this neighbor by merging their community.
+        if (
+            improved
+        ):  # Update P with the shortest path connecting p to this neighbor by merging their community.
             pmerge = reduce(lambda p, q: p | q, minpath)
             P = (P - minpath) | {pmerge}
             QG = nx.quotient_graph(G, P)  # re-compute the quotient graph QG
