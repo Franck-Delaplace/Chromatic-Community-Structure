@@ -156,14 +156,14 @@ def Gamma(r: int, n: int, d: int) -> int:
 #  Chromatic entropy -------------------------------------
 
 
-def Hcore(r: int, n: int, d: int, funenum: fun3int2int_t) -> float:
+def Hcore(r: int, n: int, d: int, funenum: fun3int2int_t = Gamma) -> float:
     """Compute the core chromarity
 
     Args:
         r (int): number of colors,
         n (int): size of a community,
         d (int): number of nodes with the same color,
-        funenum (function): enumeration function.
+        funenum (function): enumeration function. (Default Gamma)
 
     Returns:
         float: chromarity value.
