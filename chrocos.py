@@ -46,6 +46,7 @@ graph_t: TypeAlias = nx.classes.graph.Graph
 # enumeration function type
 fun3int2int_t: TypeAlias = Callable[[int, int, int], int]
 
+
 # ** BASIC FUNCTIONS =====================================================
 
 
@@ -127,8 +128,8 @@ def Kappa(r: int, n: int, d: int) -> int:
     kappa = 0
     for k in range(1, min(r, n // d) + 1):
         kappa += (
-            (-1) ** (k - 1) * comb(r, k) * factorial(n) * (r - k) ** (n - k * d)
-        ) // (factorial(n - k * d) * factorial(d) ** k)
+                         (-1) ** (k - 1) * comb(r, k) * factorial(n) * (r - k) ** (n - k * d)
+                 ) // (factorial(n - k * d) * factorial(d) ** k)
     return kappa
 
 
@@ -170,7 +171,7 @@ def Hcore(r: int, n: int, d: int, funenum: fun3int2int_t = Gamma) -> float:
     """
     assert r > 0
     assert n >= d >= 0
-    p = funenum(r, n, d) / r**n
+    p = funenum(r, n, d) / r ** n
 
     try:
         h = -p * log2(1 - p)
@@ -184,10 +185,10 @@ def H(P: set, c: dict, r: int, funenum: fun3int2int_t = Gamma) -> float:
     """compute the chromarity
 
     Args:
+        funenum:
         P (set):  community structure,
         c (dict):  color profile,
         r (int): number of colors,
-        funK (fun3int2int_t, optional): enumeration function. Defaults to Gamma.
 
     Returns:
         float: chromatic entropy.
@@ -199,7 +200,7 @@ def H(P: set, c: dict, r: int, funenum: fun3int2int_t = Gamma) -> float:
         try:
             h += Hcore(r, len(p), max(Counter(colors).values()), funenum)
         except (
-            ValueError
+                ValueError
         ):  # case if a community is empty or only with transparent nodes - skip it (provisionally )
             pass
 
@@ -226,20 +227,24 @@ __CHROCOS_PALETTE__ = {
     10: "teal",
 }
 
-
 # Default font
 __FONT__ = "Franklin Gothic Heavy"  # other nice fonts  'Tahoma'  'Impact'
 
 
-def DrawColoredGraph(G, palette: dict[int, str] = __CHROCOS_PALETTE__, pos=None):
+def DrawColoredGraph(G, palette: dict[int, str] = __CHROCOS_PALETTE__, pos=None, color="color"):
     """Display a colored graph
-
-    Args:
-        G (Graph): colored graph
-        palette (dict[int,str], optional): color palette associating a color to integer. Defaults to __CHROCOS_PALETTE__ (up to 10 colors).
-        pos (dict|None, optional): node position. Defaults to None.
+    :param G:  Graph
+    :type G:  nx.Graph
+    :param palette:  color palette associating a color to integer. Defaults to __CHROCOS_PALETTE__ (up to 10 colors)
+    :type palette: dict[int, str]
+    :param pos: position where to draw the graph (Defaults: None)
+    :type pos: dict|None
+    :param  color: attribute denominating the color (Defaults: 'color')
+    :type color: str
+    :return: Draw graph
+    :rtype: None
     """
-    color = nx.get_node_attributes(G, "color")
+    color = nx.get_node_attributes(G, name=color)
     nx.draw_networkx(
         G,
         with_labels=True,
@@ -281,15 +286,23 @@ def DrawChroCoS(G, P: set[frozenset], theme: str = "Set2", pos=None):
 
 
 def RandomColoring(
-    G: graph_t, seeds: list, density: float = 0.2, transparency: float = 0.0
+        G: graph_t, seeds: list, density: float = 0.2, transparency: float = 0.0, color: str = "color"
 ):
     """Attributes colors to nodes of graph G randomly.
-
-    Args:
-        G (Graph): undirected graph that must be a single component.
-        seeds (list): list of seeds (nodes)
-        density (float, optional): probability parameter higher the value less the colors are scattered . Defaults to 0.2.
-        transparency (float, optional): probability of transparent nodes. Defaults to 0.
+    :param G: Graph
+    :type G: nx.Graph
+    :param seeds: list of seeds
+    :type seeds: list
+    :param density:  probability parameter:  higher the value less the colors are scattered .
+    (Defaults: 0.2).
+    :type density: float
+    :param transparency: probability of transparent nodes.
+    (Defaults: 0).
+    :type transparency: float
+    :param color: attribute denominating the color (Default :'color')
+    :type color: str
+    :return: a colored graph
+    :rtype: nx.Graph with color attributes
     """
     assert 0.0 <= density <= 1.0
     assert 0.0 <= transparency <= 1.0
@@ -307,12 +320,11 @@ def RandomColoring(
         )[0]
 
     nx.set_node_attributes(
-        G, dict([(v, ChooseColorRandomly(seeds, v)) for v in G.nodes()]), "color"
-    )
+        G, dict([(v, ChooseColorRandomly(seeds, v)) for v in G.nodes()]), name=color)
 
     if transparency > 0:
         transparent = [v for v in G.nodes() if random() < transparency]
-        nx.set_node_attributes(G, dict.fromkeys(transparent, 0), "color")
+        nx.set_node_attributes(G, dict.fromkeys(transparent, 0), name=color)
 
 
 def GenerateSeeds(G: graph_t, r: int) -> list:
@@ -364,55 +376,59 @@ def GenerateSeeds(G: graph_t, r: int) -> list:
 # ** CHROCODE ===========================================================================
 
 
-def MonochromeCommunityStructure(G: graph_t) -> set:
+def MonochromeCommunityStructure(G: graph_t, color: str) -> set:
     """Compute a monochrome community structure of graph G.
-
-    Args:
-        G (Graph): Undirected colored graph
-
-    Returns:
-        set[frozenset[node]] : community structure
+    :param G: graph
+    :type G: nx.Graph
+    :param color: color demonating the color
+    :type color: str
+    :return: community structure
+    :rtype:  set[frozenset[node]]
     """
     pendingnodes = set(G.nodes())
     P = set()
     while pendingnodes:
         v = next(iter(pendingnodes))  # take the first available node
-        referencecolor = G.nodes[v]["color"]  # get its color used as reference color
+        referencecolor = G.nodes[v][color]  # get its color used as reference color
         p = set()
         monochromeneighbors = {v}
         while monochromeneighbors:
             v = monochromeneighbors.pop()  # take a node for including its neighbors
             p.add(v)  # add the current node to the community
             for w in G[v]:  # extend the neighbor set with the same color
-                if G.nodes[w]["color"] == referencecolor and w not in p:
+                if G.nodes[w][color] == referencecolor and w not in p:
                     monochromeneighbors.add(w)
 
         pendingnodes = (
-            pendingnodes - p
+                pendingnodes - p
         )  # remove the community of the examined vertices.
         P.add(frozenset(p))  # add the community to the structure
     return P
 
 
 def ChroCoDe(
-    G: graph_t, r: int, radius: int = 1, funenum: fun3int2int_t = Gamma
+        G: graph_t, r: int, radius: int = 1, funenum: fun3int2int_t = Gamma, color: str = "color"
 ) -> set:
-    """Find a chromatic community structure.
-    Args:
-        G (Graph): Colored undirected graph
-        r (int): number of colors
-        radius (int, optional): neighborhood distance. Defaults to 1.
-        funenum (function(int,int,int)->int, optional): enumeration function counting the color profile communities. Defaults to Gamma.
-
-    Returns:
-        set[frozenset[node]] : community structure.
+    """Find a chromatic community structure from a colored graph.
+    :param G: undirected graph
+    :type G: nx.Graph
+    :param r: number of colors
+    :type r: int
+    :param radius: radius of community (Default: 1)
+    :type radius: int
+    :param funenum: function that returns the number of colors
+    :type funenum:  function(int,int,int)->int
+    :param color: attribute denominating the color (Default: 'color')
+    :type color: str
+    :return: community structure
+    :rtype: set[frozenset[node]]
     """
     assert radius > 0
     assert r > 0
 
-    colorprofile = nx.get_node_attributes(G, "color")
+    colorprofile = nx.get_node_attributes(G, name=color)
     QG = nx.quotient_graph(
-        G, MonochromeCommunityStructure(G)
+        G, MonochromeCommunityStructure(G, color)
     )  # Quotient graph of the monochrome community structure.
     P = set(QG.nodes())
     Pscan = P.copy()  # Initialize the running community structure Pscan.
@@ -428,7 +444,7 @@ def ChroCoDe(
         Pscan.remove(p)  # remove p of the running community structure PScan.
 
         N = list(
-            nx.ego_graph(QG, p, radius=radius).nodes()
+            nx.ego_graph(QG, p, radius=radius, center=False).nodes()
         )  # compute the neighborhood of size radius but p.
         N.remove(p)
 
@@ -440,13 +456,13 @@ def ChroCoDe(
             pmerge = reduce(lambda p, q: p | q, communitypath)  # Union of communities of the path.
 
             h = H((P - communitypath) | {pmerge}, colorprofile, r, funenum)  # add pmerge to P
-            if hmin >= h:  # !>= matters for the correctness.
+            if hmin >= h:
                 improved = True
                 hmin = h
                 minpath = communitypath.copy()
 
         if (
-            improved
+                improved
         ):  # Update P with the shortest path connecting p to this neighbor by merging their community.
             pmerge = reduce(lambda p, q: p | q, minpath)
             P = (P - minpath) | {pmerge}
