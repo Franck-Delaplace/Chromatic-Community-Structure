@@ -11,7 +11,6 @@ from chrocos import (
     H,
     Kappa,
     Gamma,
-    DrawColoredGraph,
     DrawChroCoS,
     RandomColoring,
     GenerateSeeds,
