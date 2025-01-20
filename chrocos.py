@@ -443,10 +443,7 @@ def ChroCoDe(
                 p = q
         Pscan.remove(p)  # remove p of the running community structure PScan.
 
-        N = list(
-            nx.ego_graph(QG, p, radius=radius, center=False).nodes()
-        )  # compute the neighborhood of size radius but p.
-        N.remove(p)
+        N = list(nx.ego_graph(QG, p, radius=radius, center=False).nodes())  # compute the neighborhood of size radius but p.
 
         hmin = H(P, colorprofile, r, funenum)
         minpath = set()
